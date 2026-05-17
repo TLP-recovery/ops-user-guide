@@ -1,0 +1,2292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Yard Management & Receiving — Forklift Operator Guides</title>
+<style>
+:root {
+  --navy: #1E3A5F;
+  --navy-deep: #1A2330;
+  --orange: #F39C12;
+  --orange-dk: #C87F0A;
+  --gray-body: #5C6773;
+  --gray-light: #E1E5EA;
+  --gray-bg: #F6F8FB;
+  --white: #FFFFFF;
+  --sidebar-w: 240px;
+  --topbar-h: 56px;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-size: 16px;
+  line-height: 1.5;
+  color: var(--navy-deep);
+  background: var(--gray-bg);
+  -webkit-font-smoothing: antialiased;
+}
+
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: var(--navy);
+  color: var(--white);
+  padding: 0.75rem 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  border-bottom: 3px solid var(--orange);
+  min-height: var(--topbar-h);
+}
+.topbar-title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+.topbar-tabs {
+  display: flex;
+  gap: 0.5rem;
+  margin-left: auto;
+  flex-wrap: wrap;
+}
+.tab {
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.25);
+  color: var(--white);
+  padding: 0.4rem 0.9rem;
+  border-radius: 999px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.15s;
+}
+.tab:hover { background: rgba(255,255,255,0.1); }
+.tab.active {
+  background: var(--orange);
+  border-color: var(--orange);
+  color: var(--navy-deep);
+}
+.search-wrap { display: flex; align-items: center; }
+.search-input {
+  background: rgba(255,255,255,0.12);
+  border: 1px solid rgba(255,255,255,0.2);
+  color: var(--white);
+  padding: 0.35rem 0.75rem;
+  border-radius: 999px;
+  font-size: 0.9rem;
+  width: 200px;
+  font-family: inherit;
+}
+.search-input::placeholder { color: rgba(255,255,255,0.55); }
+.search-input:focus { outline: none; border-color: var(--orange); }
+
+.menu-toggle {
+  display: none;
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.25);
+  color: var(--white);
+  padding: 0.4rem 0.7rem;
+  border-radius: 6px;
+  font-family: inherit;
+  cursor: pointer;
+}
+
+/* Full-width layout, no max-width cap */
+.layout {
+  display: flex;
+  width: 100%;
+}
+
+.sidebar {
+  width: var(--sidebar-w);
+  flex-shrink: 0;
+  padding: 1.5rem 0.75rem 1.5rem 1rem;
+  position: sticky;
+  top: var(--topbar-h);
+  align-self: flex-start;
+  height: calc(100vh - var(--topbar-h));
+  overflow-y: auto;
+  background: var(--gray-bg);
+  border-right: 1px solid var(--gray-light);
+}
+.sidebar-nav { display: none; }
+.sidebar-nav.visible { display: block; }
+.sidebar-heading {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: var(--navy);
+  text-transform: uppercase;
+  margin: 0 0 0.5rem 0.5rem;
+}
+.sidebar-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.sidebar-list a {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  padding: 0.5rem 0.7rem;
+  border-radius: 6px;
+  color: var(--navy-deep);
+  text-decoration: none;
+  font-size: 0.9rem;
+  line-height: 1.3;
+  border-left: 3px solid transparent;
+}
+.sidebar-list a:hover { background: rgba(243,156,18,0.08); }
+.sidebar-list a.active {
+  background: rgba(243,156,18,0.12);
+  border-left-color: var(--orange);
+  color: var(--navy);
+  font-weight: 600;
+}
+.sidebar-tag {
+  font-weight: 700;
+  color: var(--orange-dk);
+  font-size: 0.72rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  flex-shrink: 0;
+  min-width: 2.5em;
+}
+.sidebar-title { flex: 1; }
+
+.main {
+  flex: 1;
+  padding: 1.5rem 2.5rem 4rem;
+  min-width: 0;
+  background: var(--white);
+}
+.guide-section { display: none; }
+.guide-section.active { display: block; }
+
+/* Inner content max-width for text readability (image breaks out) */
+.inner {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.hero {
+  background: var(--navy);
+  color: var(--white);
+  padding: 2.5rem 2rem;
+  border-radius: 12px;
+  margin-bottom: 2.5rem;
+  border-left: 6px solid var(--orange);
+}
+.hero-eyebrow {
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: var(--orange);
+  text-transform: uppercase;
+  margin-bottom: 0.75rem;
+}
+.hero-title {
+  font-size: 2.25rem;
+  font-weight: 700;
+  margin: 0 0 0.75rem 0;
+  line-height: 1.15;
+}
+.hero-subtitle {
+  font-size: 1.1rem;
+  color: #CFD8E3;
+  margin: 0;
+}
+
+.step {
+  margin: 3rem 0;
+  padding-top: 1.5rem;
+  scroll-margin-top: 80px;
+}
+.step + .step { border-top: 1px solid var(--gray-light); }
+
+.step-header {
+  max-width: 1100px;
+  margin-bottom: 1.5rem;
+}
+.eyebrow {
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: var(--orange-dk);
+  text-transform: uppercase;
+  margin: 0 0 0.4rem;
+}
+.step-title {
+  font-size: 1.85rem;
+  font-weight: 700;
+  margin: 0 0 0.5rem 0;
+  color: var(--navy);
+}
+.descriptor {
+  font-size: 1.05rem;
+  color: var(--gray-body);
+  margin: 0;
+  font-style: italic;
+}
+
+.step-image {
+  margin: 0 0 2rem;
+  text-align: center;
+}
+.step-image img {
+  display: block;
+  width: 100%;
+  max-width: 1400px;
+  height: auto;
+  margin: 0 auto;
+  border-radius: 8px;
+  border: 1px solid var(--gray-light);
+  background: var(--white);
+}
+
+.step-callouts {
+  max-width: 1400px;
+}
+.callouts-heading {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--navy);
+  margin: 0 0 1rem 0;
+  border-bottom: 2px solid var(--orange);
+  padding-bottom: 0.35rem;
+  display: inline-block;
+}
+.callout-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+  gap: 1rem 2.5rem;
+}
+.callout-item {
+  display: grid;
+  grid-template-columns: 1.75rem 1fr;
+  gap: 0.6rem;
+  align-items: start;
+  padding: 0.25rem 0;
+}
+.callout-num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  background: var(--orange);
+  color: var(--white);
+  border-radius: 50%;
+  font-weight: 700;
+  font-size: 0.85rem;
+  flex-shrink: 0;
+  margin-top: 0.15rem;
+}
+.callout-title {
+  font-weight: 600;
+  color: var(--navy-deep);
+  margin-bottom: 0.15rem;
+}
+.callout-body {
+  color: var(--gray-body);
+  font-size: 0.92rem;
+  line-height: 1.5;
+}
+
+.match-hidden { display: none !important; }
+
+/* Tablet and narrower */
+@media (max-width: 900px) {
+  .main { padding: 1rem 1.25rem 3rem; }
+  .callout-list { grid-template-columns: 1fr; }
+  .step-title { font-size: 1.5rem; }
+  .hero { padding: 1.5rem 1.25rem; }
+  .hero-title { font-size: 1.6rem; }
+}
+
+/* Mobile */
+@media (max-width: 760px) {
+  .topbar { padding: 0.6rem 0.9rem; gap: 0.6rem; flex-wrap: wrap; }
+  .topbar-title { font-size: 0.95rem; }
+  .search-input { width: 140px; }
+  .menu-toggle { display: inline-flex; }
+  .layout { flex-direction: column; }
+  .sidebar {
+    width: 100%;
+    height: auto;
+    position: static;
+    padding: 0.5rem 0.75rem;
+    border-right: none;
+    border-bottom: 1px solid var(--gray-light);
+    display: none;
+  }
+  .sidebar.open { display: block; }
+}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <button class="menu-toggle" aria-label="Toggle menu" id="menuBtn">☰</button>
+  <div class="topbar-title">Forklift Operator Guides</div>
+  <div class="topbar-tabs">
+    <button class="tab active" data-guide="ym">Yard Management</button>
+    <button class="tab" data-guide="rcv">Receiving</button>
+  </div>
+  <div class="search-wrap">
+    <input class="search-input" id="searchInput" placeholder="Search…" type="search" aria-label="Search">
+  </div>
+</header>
+
+<div class="layout">
+  <aside class="sidebar" id="sidebar">
+    <div data-guide-nav-wrap="ym">
+      <div class="sidebar-heading">Yard Management</div>
+      
+      <nav class="sidebar-nav" data-guide-nav="ym">
+        <ol class="sidebar-list">
+          <li>
+            <a href="#ym-step-1-clock-in" data-section="ym-step-1-clock-in">
+              <span class="sidebar-tag">1</span>
+              <span class="sidebar-title">Clock In</span>
+            </a>
+          </li>
+          <li>
+            <a href="#ym-step-2-select-terminal-open-loads" data-section="ym-step-2-select-terminal-open-loads">
+              <span class="sidebar-tag">2</span>
+              <span class="sidebar-title">Select Terminal &amp; Open Loads</span>
+            </a>
+          </li>
+          <li>
+            <a href="#ym-step-3-choose-a-load" data-section="ym-step-3-choose-a-load">
+              <span class="sidebar-tag">3</span>
+              <span class="sidebar-title">Choose a Load</span>
+            </a>
+          </li>
+          <li>
+            <a href="#ym-step-4-load-details" data-section="ym-step-4-load-details">
+              <span class="sidebar-tag">4</span>
+              <span class="sidebar-title">Load Details</span>
+            </a>
+          </li>
+          <li>
+            <a href="#ym-step-5-the-action-menu" data-section="ym-step-5-the-action-menu">
+              <span class="sidebar-tag">5</span>
+              <span class="sidebar-title">The Action Menu</span>
+            </a>
+          </li>
+          <li>
+            <a href="#ym-step-6-select-the-driver" data-section="ym-step-6-select-the-driver">
+              <span class="sidebar-tag">6</span>
+              <span class="sidebar-title">Select the Driver</span>
+            </a>
+          </li>
+          <li>
+            <a href="#ym-step-7-start-loading-the-truck" data-section="ym-step-7-start-loading-the-truck">
+              <span class="sidebar-tag">7</span>
+              <span class="sidebar-title">Start Loading the Truck</span>
+            </a>
+          </li>
+          <li>
+            <a href="#ym-step-8-open-the-bol-items" data-section="ym-step-8-open-the-bol-items">
+              <span class="sidebar-tag">8</span>
+              <span class="sidebar-title">Open the BOL Items</span>
+            </a>
+          </li>
+          <li>
+            <a href="#ym-step-9-select-items-to-load" data-section="ym-step-9-select-items-to-load">
+              <span class="sidebar-tag">9</span>
+              <span class="sidebar-title">Select Items to Load</span>
+            </a>
+          </li>
+          <li>
+            <a href="#ym-step-10-mark-items-as-loaded" data-section="ym-step-10-mark-items-as-loaded">
+              <span class="sidebar-tag">10</span>
+              <span class="sidebar-title">Mark Items as Loaded</span>
+            </a>
+          </li>
+          <li>
+            <a href="#ym-step-11-item-details" data-section="ym-step-11-item-details">
+              <span class="sidebar-tag">11</span>
+              <span class="sidebar-title">Item Details</span>
+            </a>
+          </li>
+          <li>
+            <a href="#ym-step-12-document-an-item" data-section="ym-step-12-document-an-item">
+              <span class="sidebar-tag">12</span>
+              <span class="sidebar-title">Document an Item</span>
+            </a>
+          </li>
+          <li>
+            <a href="#ym-step-13-all-items-loaded" data-section="ym-step-13-all-items-loaded">
+              <span class="sidebar-tag">13</span>
+              <span class="sidebar-title">All Items Loaded</span>
+            </a>
+          </li>
+          <li>
+            <a href="#ym-step-14-close-out-capture-the-pod" data-section="ym-step-14-close-out-capture-the-pod">
+              <span class="sidebar-tag">14</span>
+              <span class="sidebar-title">Close Out: Capture the POD</span>
+            </a>
+          </li>
+          <li>
+            <a href="#ym-step-15-document-the-proof-of-delivery-pod" data-section="ym-step-15-document-the-proof-of-delivery-pod">
+              <span class="sidebar-tag">15</span>
+              <span class="sidebar-title">Document the Proof of Delivery (POD)</span>
+            </a>
+          </li>
+          <li>
+            <a href="#ym-step-16-scan-the-pod-document" data-section="ym-step-16-scan-the-pod-document">
+              <span class="sidebar-tag">16</span>
+              <span class="sidebar-title">Scan the POD Document</span>
+            </a>
+          </li>
+          <li>
+            <a href="#ym-step-17-review-captured-pages" data-section="ym-step-17-review-captured-pages">
+              <span class="sidebar-tag">17</span>
+              <span class="sidebar-title">Review Captured Pages</span>
+            </a>
+          </li>
+          <li>
+            <a href="#ym-step-18-everything-attached-to-the-load" data-section="ym-step-18-everything-attached-to-the-load">
+              <span class="sidebar-tag">18</span>
+              <span class="sidebar-title">Everything Attached to the Load</span>
+            </a>
+          </li>
+          <li>
+            <a href="#ym-step-19-close-out-end-loading-loading-complete" data-section="ym-step-19-close-out-end-loading-loading-complete">
+              <span class="sidebar-tag">19</span>
+              <span class="sidebar-title">Close Out: End Loading &amp; Loading Complete</span>
+            </a>
+          </li>
+          <li>
+            <a href="#ym-anytime-helping-on-a-load" data-section="ym-anytime-helping-on-a-load">
+              <span class="sidebar-tag">ANYTIME</span>
+              <span class="sidebar-title">Helping on a Load</span>
+            </a>
+          </li></ol>
+      </nav>
+    </div>
+    <div data-guide-nav-wrap="rcv" style="display:none">
+      <div class="sidebar-heading">Receiving</div>
+      
+      <nav class="sidebar-nav" data-guide-nav="rcv">
+        <ol class="sidebar-list">
+          <li>
+            <a href="#rcv-step-1-select-your-terminal" data-section="rcv-step-1-select-your-terminal">
+              <span class="sidebar-tag">1</span>
+              <span class="sidebar-title">Select Your Terminal</span>
+            </a>
+          </li>
+          <li>
+            <a href="#rcv-step-2-find-your-equipment" data-section="rcv-step-2-find-your-equipment">
+              <span class="sidebar-tag">2</span>
+              <span class="sidebar-title">Find Your Equipment</span>
+            </a>
+          </li>
+          <li>
+            <a href="#rcv-step-3-select-task" data-section="rcv-step-3-select-task">
+              <span class="sidebar-tag">3</span>
+              <span class="sidebar-title">Select Task</span>
+            </a>
+          </li>
+          <li>
+            <a href="#rcv-reference-working-as-a-team" data-section="rcv-reference-working-as-a-team">
+              <span class="sidebar-tag">REFERENCE</span>
+              <span class="sidebar-title">Working as a Team</span>
+            </a>
+          </li>
+          <li>
+            <a href="#rcv-step-4-review-the-item-list" data-section="rcv-step-4-review-the-item-list">
+              <span class="sidebar-tag">4</span>
+              <span class="sidebar-title">Review the Item List</span>
+            </a>
+          </li>
+          <li>
+            <a href="#rcv-step-5-locate-unloaded-items" data-section="rcv-step-5-locate-unloaded-items">
+              <span class="sidebar-tag">5</span>
+              <span class="sidebar-title">Locate Unloaded Items</span>
+            </a>
+          </li>
+          <li>
+            <a href="#rcv-step-6-select-location" data-section="rcv-step-6-select-location">
+              <span class="sidebar-tag">6</span>
+              <span class="sidebar-title">Select Location</span>
+            </a>
+          </li>
+          <li>
+            <a href="#rcv-step-7-items-remaining" data-section="rcv-step-7-items-remaining">
+              <span class="sidebar-tag">7</span>
+              <span class="sidebar-title">Items Remaining</span>
+            </a>
+          </li>
+          <li>
+            <a href="#rcv-reference-inventory-details" data-section="rcv-reference-inventory-details">
+              <span class="sidebar-tag">REFERENCE</span>
+              <span class="sidebar-title">Inventory Details</span>
+            </a>
+          </li>
+          <li>
+            <a href="#rcv-reference-documenting-damaged-items" data-section="rcv-reference-documenting-damaged-items">
+              <span class="sidebar-tag">REFERENCE</span>
+              <span class="sidebar-title">Documenting Damaged Items</span>
+            </a>
+          </li>
+          <li>
+            <a href="#rcv-reference-updating-item-weight" data-section="rcv-reference-updating-item-weight">
+              <span class="sidebar-tag">REFERENCE</span>
+              <span class="sidebar-title">Updating Item Weight</span>
+            </a>
+          </li>
+          <li>
+            <a href="#rcv-step-8-all-items-processed-receiver-not-yet-done" data-section="rcv-step-8-all-items-processed-receiver-not-yet-done">
+              <span class="sidebar-tag">8</span>
+              <span class="sidebar-title">All Items Processed — Receiver Not Yet Done</span>
+            </a>
+          </li>
+          <li>
+            <a href="#rcv-step-9-review-missing-items" data-section="rcv-step-9-review-missing-items">
+              <span class="sidebar-tag">9</span>
+              <span class="sidebar-title">Review Missing Items</span>
+            </a>
+          </li>
+          <li>
+            <a href="#rcv-step-10-close-the-receiver" data-section="rcv-step-10-close-the-receiver">
+              <span class="sidebar-tag">10</span>
+              <span class="sidebar-title">Close the Receiver</span>
+            </a>
+          </li>
+          <li>
+            <a href="#rcv-step-11-two-final-confirmations" data-section="rcv-step-11-two-final-confirmations">
+              <span class="sidebar-tag">11</span>
+              <span class="sidebar-title">Two Final Confirmations</span>
+            </a>
+          </li></ol>
+      </nav>
+    </div>
+  </aside>
+
+  <main class="main">
+    <article class="guide-section active" data-guide-content="ym">
+      
+      <div class="hero">
+        <div class="hero-eyebrow">FORKLIFT OPERATOR’S</div>
+        <h1 class="hero-title">Yard Management User Guide</h1>
+        <p class="hero-subtitle">How to load a truck using the Yard Management iPad app version 16.1 as of May 16, 2026 — A step-by-step walkthrough  · SCM</p>
+      </div>
+      
+
+    <section id="ym-step-1-clock-in" class="step">
+      <div class="step-header">
+        <div class="eyebrow">STEP  1</div>
+        <h2 class="step-title">Clock In</h2>
+        <p class="descriptor">Confirm you&#x27;re clocked in, then open Yard Management.</p>
+      </div>
+      <figure class="step-image">
+        <img src="slides/ym-02.jpg" alt="Clock In" loading="lazy">
+      </figure>
+      <div class="step-callouts">
+        <h3 class="callouts-heading">What you'll see on this screen</h3>
+        <ol class="callout-list">
+                <li class="callout-item">
+                  <span class="callout-num">1</span>
+                  <div class="callout-text">
+                    <div class="callout-title">Your login</div>
+                    <div class="callout-body">Your name and email show at the top so you know you&#x27;re signed in to the right account.</div>
+                  </div>
+                </li>
+                <li class="callout-item">
+                  <span class="callout-num">2</span>
+                  <div class="callout-text">
+                    <div class="callout-title">Clock-in status</div>
+                    <div class="callout-body">“Out of Terminal” shows your current state and your home terminal mileage. It updates once you start a job.</div>
+                  </div>
+                </li>
+                <li class="callout-item">
+                  <span class="callout-num">3</span>
+                  <div class="callout-text">
+                    <div class="callout-title">Clock Out button (green = clocked in)</div>
+                    <div class="callout-body">The button is green and labeled Clock Out because you&#x27;re already clocked in. Only press it at the end of your shift.</div>
+                  </div>
+                </li>
+                <li class="callout-item">
+                  <span class="callout-num">4</span>
+                  <div class="callout-text">
+                    <div class="callout-title">Lunch breaks</div>
+                    <div class="callout-body">Tap Lunch 1 Start or Lunch 2 Start to log a meal break. Payroll Time keeps running across the bottom.</div>
+                  </div>
+                </li>
+                <li class="callout-item">
+                  <span class="callout-num">5</span>
+                  <div class="callout-text">
+                    <div class="callout-title">Tap Yard Management</div>
+                    <div class="callout-body">From here you&#x27;ll choose Yard Management to start loading a truck. Fuel Loads and Container Onsite Check aren&#x27;t covered in this guide.</div>
+                  </div>
+                </li></ol>
+      </div>
+    </section>
+
+    <section id="ym-step-2-select-terminal-open-loads" class="step">
+      <div class="step-header">
+        <div class="eyebrow">STEP  2</div>
+        <h2 class="step-title">Select Terminal &amp; Open Loads</h2>
+        <p class="descriptor">Tap your terminal, then choose Planned Loads or All Loads.</p>
+      </div>
+      <figure class="step-image">
+        <img src="slides/ym-03.jpg" alt="Select Terminal &amp; Open Loads" loading="lazy">
+      </figure>
+      <div class="step-callouts">
+        <h3 class="callouts-heading">What you'll see on this screen</h3>
+        <ol class="callout-list">
+                <li class="callout-item">
+                  <span class="callout-num">1</span>
+                  <div class="callout-text">
+                    <div class="callout-title">Back arrow</div>
+                    <div class="callout-body">Returns you to the Clock In screen if you opened Yard Management by mistake.</div>
+                  </div>
+                </li>
+                <li class="callout-item">
+                  <span class="callout-num">2</span>
+                  <div class="callout-text">
+                    <div class="callout-title">Tap your terminal</div>
+                    <div class="callout-body">Pick the location you&#x27;re working today — Napa here. The row turns orange to confirm your choice.</div>
+                  </div>
+                </li>
+                <li class="callout-item">
+                  <span class="callout-num">3</span>
+                  <div class="callout-text">
+                    <div class="callout-title">Plan Date</div>
+                    <div class="callout-body">Defaults to today. If you&#x27;re pre-loading tomorrow&#x27;s trucks, tap the pill and set it to tomorrow&#x27;s date — Planned Loads then shows what&#x27;s scheduled for that day.</div>
+                  </div>
+                </li>
+                <li class="callout-item">
+                  <span class="callout-num">4</span>
+                  <div class="callout-text">
+                    <div class="callout-title">Planned Loads</div>
+                    <div class="callout-body">Loads the transportation department has scheduled onto house trucks for the selected date.</div>
+                  </div>
+                </li>
+                <li class="callout-item">
+                  <span class="callout-num">5</span>
+                  <div class="callout-text">
+                    <div class="callout-title">Tap All Loads</div>
+                    <div class="callout-body">Everything in the queue — house trucks plus will-call trucks. We use All Loads in this example.</div>
+                  </div>
+                </li></ol>
+      </div>
+    </section>
+
+    <section id="ym-step-3-choose-a-load" class="step">
+      <div class="step-header">
+        <div class="eyebrow">STEP  3</div>
+        <h2 class="step-title">Choose a Load</h2>
+        <p class="descriptor">Find the load you&#x27;re going to pull and tap to open it.</p>
+      </div>
+      <figure class="step-image">
+        <img src="slides/ym-04.jpg" alt="Choose a Load" loading="lazy">
+      </figure>
+      <div class="step-callouts">
+        <h3 class="callouts-heading">What you'll see on this screen</h3>
+        <ol class="callout-list">
+                <li class="callout-item">
+                  <span class="callout-num">1</span>
+                  <div class="callout-text">
+                    <div class="callout-title">Search</div>
+                    <div class="callout-body">Type a load, BOL, or shipper number to filter the list when there are dozens of loads to scan.</div>
+                  </div>
+                </li>
+                <li class="callout-item">
+                  <span class="callout-num">2</span>
+                  <div class="callout-text">
+                    <div class="callout-title">Terminal banner</div>
+                    <div class="callout-body">Confirms which yard&#x27;s loads you&#x27;re looking at — Napa (Fontana) here.</div>
+                  </div>
+                </li>
+                <li class="callout-item">
+                  <span class="callout-num">3</span>
+                  <div class="callout-text">
+                    <div class="callout-title">Load number</div>
+                    <div class="callout-body">The bold value next to “Load:” is the primary identifier. Customer numbers (1039697), shipper formats (1039965BOX), and system-generated codes (P1278433) all appear together.</div>
+                  </div>
+                </li>
+                <li class="callout-item">
+                  <span class="callout-num">4</span>
+                  <div class="callout-text">
+                    <div class="callout-title">Assigned Driver</div>
+                    <div class="callout-body">Tells you who&#x27;s picking up. A name (e.g., Villa, Pancho) is a scheduled house-truck driver. “will call” means a will-call truck — the customer&#x27;s own driver. No line at all means no driver yet.</div>
+                  </div>
+                </li>
+                <li class="callout-item">
+                  <span class="callout-num">5</span>
+                  <div class="callout-text">
+                    <div class="callout-title">Tap a load to open</div>
+                    <div class="callout-body">Tap anywhere on the row to open the load details. In this example we&#x27;ll tap 860482BOX (highlighted).</div>
+                  </div>
+                </li></ol>
+      </div>
+    </section>
+
+    <section id="ym-step-4-load-details" class="step">
+      <div class="step-header">
+        <div class="eyebrow">STEP  4</div>
+        <h2 class="step-title">Load Details</h2>
+        <p class="descriptor">Open the menu (top right) to access load actions.</p>
+      </div>
+      <figure class="step-image">
+        <img src="slides/ym-05.jpg" alt="Load Details" loading="lazy">
+      </figure>
+      <div class="step-callouts">
+        <h3 class="callouts-heading">What you'll see on this screen</h3>
+        <ol class="callout-list">
+                <li class="callout-item">
+                  <span class="callout-num">1</span>
+                  <div class="callout-text">
+                    <div class="callout-title">Tap the menu (top right)</div>
+                    <div class="callout-body">Opens the load actions menu — that&#x27;s the next screen and where you&#x27;ll go from here.</div>
+                  </div>
+                </li>
+                <li class="callout-item">
+                  <span class="callout-num">2</span>
+                  <div class="callout-text">
+                    <div class="callout-title">Load details</div>
+                    <div class="callout-body">Mostly reference numbers — Load, BOL, Shipper Number, Payor Ref, etc. Use these to confirm you opened the right load.</div>
+                  </div>
+                </li>
+                <li class="callout-item">
+                  <span class="callout-num">3</span>
+                  <div class="callout-text">
+                    <div class="callout-title">Driver Signature</div>
+                    <div class="callout-body">Greyed out — you can&#x27;t collect the driver&#x27;s signature until the load is marked complete.</div>
+                  </div>
+                </li>
+                <li class="callout-item">
+                  <span class="callout-num">4</span>
+                  <div class="callout-text">
+                    <div class="callout-title">Select BOL Items</div>
+                    <div class="callout-body">Opens the list of items on the bill of lading so you can mark each one as loaded.</div>
+                  </div>
+                </li>
+                <li class="callout-item">
+                  <span class="callout-num">5</span>
+                  <div class="callout-text">
+                    <div class="callout-title">Loading Complete</div>
+                    <div class="callout-body">Marks the load as fully loaded. Only tap this once every item is on the truck.</div>
+                  </div>
+                </li></ol>
+      </div>
+    </section>
+
+    <section id="ym-step-5-the-action-menu" class="step">
+      <div class="step-header">
+        <div class="eyebrow">STEP  5</div>
+        <h2 class="step-title">The Action Menu</h2>
+        <p class="descriptor">Tap Assign to Driver — the first step in loading a truck.</p>
+      </div>
+      <figure class="step-image">
+        <img src="slides/ym-06.jpg" alt="The Action Menu" loading="lazy">
+      </figure>
+      <div class="step-callouts">
+        <h3 class="callouts-heading">What you'll see on this screen</h3>
+        <ol class="callout-list">
+                <li class="callout-item">
+                  <span class="callout-num">1</span>
+                  <div class="callout-text">
+                    <div class="callout-title">The Action Menu</div>
+                    <div class="callout-body">Tapping the hamburger opens this list of load actions. We&#x27;ll cover each one as we use it — two are skipped in this guide, the rest are coming up step by step.</div>
+                  </div>
+                </li>
+                <li class="callout-item">
+                  <span class="callout-num">2</span>
+                  <div class="callout-text">
+                    <div class="callout-title">Skipped today</div>
+                    <div class="callout-body">Assign to Warehouse Staff is for a manager assigning the load to specific staff. Set Stage Location flags where the staged items wait for the truck. Both are typically handled before you arrive at the load.</div>
+                  </div>
+                </li>
+                <li class="callout-item">
+                  <span class="callout-num">3</span>
+                  <div class="callout-text">
+                    <div class="callout-title">Tap Assign to Driver</div>
+                    <div class="callout-body">The first step in loading a truck — the driver must be on the load before anything else happens. Some loads already show a name from the office (see Step 3); if yours doesn&#x27;t, you assign it here.</div>
+                  </div>
+                </li></ol>
+      </div>
+    </section>
+
+    <section id="ym-step-6-select-the-driver" class="step">
+      <div class="step-header">
+        <div class="eyebrow">STEP  6</div>
+        <h2 class="step-title">Select the Driver</h2>
+        <p class="descriptor">Pick the driver, then tap Assign.</p>
+      </div>
+      <figure class="step-image">
+        <img src="slides/ym-07.jpg" alt="Select the Driver" loading="lazy">
+      </figure>
+      <div class="step-callouts">
+        <h3 class="callouts-heading">What you'll see on this screen</h3>
+        <ol class="callout-list">
+                <li class="callout-item">
+                  <span class="callout-num">1</span>
+                  <div class="callout-text">
+                    <div class="callout-title">Select Driver screen</div>
+                    <div class="callout-body">Tapping Assign to Driver brings you here — the list of drivers available for your terminal.</div>
+                  </div>
+                </li>
+                <li class="callout-item">
+                  <span class="callout-num">2</span>
+                  <div class="callout-text">
+                    <div class="callout-title">Back</div>
+                    <div class="callout-body">Returns you to the action menu without making a change.</div>
+                  </div>
+                </li>
+                <li class="callout-item">
+                  <span class="callout-num">3</span>
+                  <div class="callout-text">
+                    <div class="callout-title">Search</div>
+                    <div class="callout-body">Type a name or phone number to filter the list when you have a lot of drivers to scan through.</div>
+                  </div>
+                </li>
+                <li class="callout-item">
+                  <span class="callout-num">4</span>
+                  <div class="callout-text">
+                    <div class="callout-title">Choose a driver</div>
+                    <div class="callout-body">Tap the driver hauling this load — Chuck Norris in this example. The row turns orange to confirm your selection.</div>
+                  </div>
+                </li>
+                <li class="callout-item">
+                  <span class="callout-num">5</span>
+                  <div class="callout-text">
+                    <div class="callout-title">Tap Assign</div>
+                    <div class="callout-body">Locks the driver onto the load. The app returns to Load Details with the driver now populated.</div>
+                  </div>
+                </li></ol>
+      </div>
+    </section>
+
+    <section id="ym-step-7-start-loading-the-truck" class="step">
+      <div class="step-header">
+        <div class="eyebrow">STEP  7</div>
+        <h2 class="step-title">Start Loading the Truck</h2>
+        <p class="descriptor">Three taps, in this order: Mark as LogIn → Start Loading → Select BOL Items.</p>
+      </div>
+      <figure class="step-image">
+        <img src="slides/ym-08.jpg" alt="Start Loading the Truck" loading="lazy">
+      </figure>
+      <div class="step-callouts">
+        <h3 class="callouts-heading">What you'll see on this screen</h3>
+        <ol class="callout-list">
+                <li class="callout-item">
+                  <span class="callout-num">1</span>
+                  <div class="callout-text">
+                    <div class="callout-title">Mark as LogIn</div>
+                    <div class="callout-body">Tap this the moment the driver and truck pull up at your dock. Login tells the system the truck is here and ready.</div>
+                  </div>
+                </li>
+                <li class="callout-item">
+                  <span class="callout-num">2</span>
+                  <div class="callout-text">
+                    <div class="callout-title">Start Loading</div>
+                    <div class="callout-body">Now tap Start Loading. This tells the system that you — the operator — are here and ready to begin loading.</div>
+                  </div>
+                </li>
+                <li class="callout-item">
+                  <span class="callout-num">3</span>
+                  <div class="callout-text">
+                    <div class="callout-title">Select BOL Items</div>
+                    <div class="callout-body">Last, tap Select BOL Items to open the list of items on the bill of lading. (Note: in the menu this sits above Start Loading, but you tap it third.)</div>
+                  </div>
+                </li></ol>
+      </div>
+    </section>
+
+    <section id="ym-step-8-open-the-bol-items" class="step">
+      <div class="step-header">
+        <div class="eyebrow">STEP  8</div>
+        <h2 class="step-title">Open the BOL Items</h2>
+        <p class="descriptor">Each line on the bill of lading appears here. Counter shows what&#x27;s still to load.</p>
+      </div>
+      <figure class="step-image">
+        <img src="slides/ym-09.jpg" alt="Open the BOL Items" loading="lazy">
+      </figure>
+      <div class="step-callouts">
+        <h3 class="callouts-heading">What you'll see on this screen</h3>
+        <ol class="callout-list">
+                <li class="callout-item">
+                  <span class="callout-num">1</span>
+                  <div class="callout-text">
+                    <div class="callout-title">Header detail</div>
+                    <div class="callout-body">Pinned summary of the load — Load, BOL, Driver, Stage Location, Withdrawal Comment. Stays visible while you work.</div>
+                  </div>
+                </li>
+                <li class="callout-item">
+                  <span class="callout-num">2</span>
+                  <div class="callout-text">
+                    <div class="callout-title">Remaining to Load</div>
+                    <div class="callout-body">Counter shows how many BOL items still need loading. Starts at the full total (7 / 7 here) and ticks down with each Load Item tap.</div>
+                  </div>
+                </li>
+                <li class="callout-item">
+                  <span class="callout-num">3</span>
+                  <div class="callout-text">
+                    <div class="callout-title">Item rows</div>
+                    <div class="callout-body">Each row is one line on the bill of lading. Brown labels are field names; values appear next to them in black bold — Description, Mill, Pounds Gross, etc.</div>
+                  </div>
+                </li>
+                <li class="callout-item">
+                  <span class="callout-num">4</span>
+                  <div class="callout-text">
+                    <div class="callout-title">Detail (i) icon</div>
+                    <div class="callout-body">Opens an Item Details page for that specific line — see full details, take photos, log damage, or enter a Heat Number. Covered next.</div>
+                  </div>
+                </li>
+                <li class="callout-item">
+                  <span class="callout-num">5</span>
+                  <div class="callout-text">
+                    <div class="callout-title">Load Item</div>
+                    <div class="callout-body">Marks whichever rows are selected as loaded. You can pick one row at a time or several at once before tapping.</div>
+                  </div>
+                </li></ol>
+      </div>
+    </section>
+
+    <section id="ym-step-9-select-items-to-load" class="step">
+      <div class="step-header">
+        <div class="eyebrow">STEP  9</div>
+        <h2 class="step-title">Select Items to Load</h2>
+        <p class="descriptor">Tap one or more rows — selected items turn orange. Counter doesn&#x27;t change until you tap Load Item.</p>
+      </div>
+      <figure class="step-image">
+        <img src="slides/ym-10.jpg" alt="Select Items to Load" loading="lazy">
+      </figure>
+      <div class="step-callouts">
+        <h3 class="callouts-heading">What you'll see on this screen</h3>
+        <ol class="callout-list">
+                <li class="callout-item">
+                  <span class="callout-num">1</span>
+                  <div class="callout-text">
+                    <div class="callout-title">Selected rows turn orange</div>
+                    <div class="callout-body">Tap any row to mark it for loading — the whole row turns orange to confirm. Tap again to deselect. You can pick several at once.</div>
+                  </div>
+                </li>
+                <li class="callout-item">
+                  <span class="callout-num">2</span>
+                  <div class="callout-text">
+                    <div class="callout-title">Unselected rows stay white</div>
+                    <div class="callout-body">Rows you haven&#x27;t tapped stay in their normal color. They&#x27;re still waiting for you to come back to them.</div>
+                  </div>
+                </li>
+                <li class="callout-item">
+                  <span class="callout-num">3</span>
+                  <div class="callout-text">
+                    <div class="callout-title">Counter doesn&#x27;t change yet</div>
+                    <div class="callout-body">Selecting doesn&#x27;t decrement Remaining. It still reads 7 / 7 — nothing is logged as loaded until you tap Load Item.</div>
+                  </div>
+                </li>
+                <li class="callout-item">
+                  <span class="callout-num">4</span>
+                  <div class="callout-text">
+                    <div class="callout-title">Tap Load Item</div>
+                    <div class="callout-body">When the selection matches what&#x27;s actually on the truck, tap Load Item. Every selected row is logged as loaded in one shot.</div>
+                  </div>
+                </li></ol>
+      </div>
+    </section>
+
+    <section id="ym-step-10-mark-items-as-loaded" class="step">
+      <div class="step-header">
+        <div class="eyebrow">STEP  10</div>
+        <h2 class="step-title">Mark Items as Loaded</h2>
+        <p class="descriptor">After Load Item, selected rows get a green check ✓ and the counter ticks down.</p>
+      </div>
+      <figure class="step-image">
+        <img src="slides/ym-11.jpg" alt="Mark Items as Loaded" loading="lazy">
+      </figure>
+      <div class="step-callouts">
+        <h3 class="callouts-heading">What you'll see on this screen</h3>
+        <ol class="callout-list">
+                <li class="callout-item">
+                  <span class="callout-num">1</span>
+                  <div class="callout-text">
+                    <div class="callout-title">Green check ✓</div>
+                    <div class="callout-body">Each row that was selected when you tapped Load Item now has a green check on the left. The check means that item is on the truck.</div>
+                  </div>
+                </li>
+                <li class="callout-item">
+                  <span class="callout-num">2</span>
+                  <div class="callout-text">
+                    <div class="callout-title">Counter ticks down</div>
+                    <div class="callout-body">Remaining drops by the number of items just loaded. Here it went from 7 / 7 to 3 / 7 — four items loaded, three still pending.</div>
+                  </div>
+                </li>
+                <li class="callout-item">
+                  <span class="callout-num">3</span>
+                  <div class="callout-text">
+                    <div class="callout-title">Pending rows</div>
+                    <div class="callout-body">Anything without a check is still waiting. Tap those rows next.</div>
+                  </div>
+                </li>
+                <li class="callout-item">
+                  <span class="callout-num">4</span>
+                  <div class="callout-text">
+                    <div class="callout-title">Repeat until 0</div>
+                    <div class="callout-body">Select the next batch, tap Load Item again. The load is fully loaded when Remaining hits 0 / 7.</div>
+                  </div>
+                </li></ol>
+      </div>
+    </section>
+
+    <section id="ym-step-11-item-details" class="step">
+      <div class="step-header">
+        <div class="eyebrow">STEP  11</div>
+        <h2 class="step-title">Item Details</h2>
+        <p class="descriptor">Tap (i) on any BOL item to open this screen — photos, damage notes, and Heat Number for that specific line.</p>
+      </div>
+      <figure class="step-image">
+        <img src="slides/ym-12.jpg" alt="Item Details" loading="lazy">
+      </figure>
+      <div class="step-callouts">
+        <h3 class="callouts-heading">What you'll see on this screen</h3>
+        <ol class="callout-list">
+                <li class="callout-item">
+                  <span class="callout-num">1</span>
+                  <div class="callout-text">
+                    <div class="callout-title">Camera (top-right)</div>
+                    <div class="callout-body">Opens the photo screen for this specific line item — covered next. Photos taken from here are tied to this item, not the whole load.</div>
+                  </div>
+                </li>
+                <li class="callout-item">
+                  <span class="callout-num">2</span>
+                  <div class="callout-text">
+                    <div class="callout-title">Item details</div>
+                    <div class="callout-body">Read-only summary — Description, Mill, Liner Ft, Pounds Gross, Warehouse Processed, Loaded state, and how many photos are already on file.</div>
+                  </div>
+                </li>
+                <li class="callout-item">
+                  <span class="callout-num">3</span>
+                  <div class="callout-text">
+                    <div class="callout-title">Damage Comments</div>
+                    <div class="callout-body">Type a short note if this item is damaged. The office sees this on the load record.</div>
+                  </div>
+                </li>
+                <li class="callout-item">
+                  <span class="callout-num">4</span>
+                  <div class="callout-text">
+                    <div class="callout-title">Heat Number</div>
+                    <div class="callout-body">If the mill heat number isn&#x27;t already populated, enter it here. Saves a trip back to ask the lead.</div>
+                  </div>
+                </li>
+                <li class="callout-item">
+                  <span class="callout-num">5</span>
+                  <div class="callout-text">
+                    <div class="callout-title">Load/Unload Item</div>
+                    <div class="callout-body">Loads just this one item or if you are viewing an item already marked loaded, you can Unload, remove the green check, from this item.</div>
+                  </div>
+                </li></ol>
+      </div>
+    </section>
+
+    <section id="ym-step-12-document-an-item" class="step">
+      <div class="step-header">
+        <div class="eyebrow">STEP  12</div>
+        <h2 class="step-title">Document an Item</h2>
+        <p class="descriptor">Tapping the camera on Item Details opens this screen. Take photos of damage or scan related docs — attached to this specific line item.</p>
+      </div>
+      <figure class="step-image">
+        <img src="slides/ym-13.jpg" alt="Document an Item" loading="lazy">
+      </figure>
+      <div class="step-callouts">
+        <h3 class="callouts-heading">What you'll see on this screen</h3>
+        <ol class="callout-list">
+                <li class="callout-item">
+                  <span class="callout-num">1</span>
+                  <div class="callout-text">
+                    <div class="callout-title">Photo Type</div>
+                    <div class="callout-body">Pick the category before you snap or scan — POD (proof of delivery), Other Doc, Damage, Loads, or Other Photo. The default is POD.</div>
+                  </div>
+                </li>
+                <li class="callout-item">
+                  <span class="callout-num">2</span>
+                  <div class="callout-text">
+                    <div class="callout-title">Comment</div>
+                    <div class="callout-body">Optional note describing what&#x27;s in the photo. Useful for damage shots so the office understands what they&#x27;re looking at.</div>
+                  </div>
+                </li>
+                <li class="callout-item">
+                  <span class="callout-num">3</span>
+                  <div class="callout-text">
+                    <div class="callout-title">Scan Docs</div>
+                    <div class="callout-body">Use this for paperwork — bills of lading, packing slips, signed documents. The app processes them as documents (multi-page friendly).</div>
+                  </div>
+                </li>
+                <li class="callout-item">
+                  <span class="callout-num">4</span>
+                  <div class="callout-text">
+                    <div class="callout-title">Take Photos</div>
+                    <div class="callout-body">Use this for photos of damage, the loaded truck, the dock, or anything else visual. Photos taken here attach to this specific line item.</div>
+                  </div>
+                </li></ol>
+      </div>
+    </section>
+
+    <section id="ym-step-13-all-items-loaded" class="step">
+      <div class="step-header">
+        <div class="eyebrow">STEP  13</div>
+        <h2 class="step-title">All Items Loaded</h2>
+        <p class="descriptor">Counter hits 0 / 7 — every row checked. Tap back to return to Load Details.</p>
+      </div>
+      <figure class="step-image">
+        <img src="slides/ym-14.jpg" alt="All Items Loaded" loading="lazy">
+      </figure>
+      <div class="step-callouts">
+        <h3 class="callouts-heading">What you'll see on this screen</h3>
+        <ol class="callout-list">
+                <li class="callout-item">
+                  <span class="callout-num">1</span>
+                  <div class="callout-text">
+                    <div class="callout-title">0 / 7 Remaining</div>
+                    <div class="callout-body">Counter reads 0 — every line on the bill of lading has been logged as loaded. The truck has every item.</div>
+                  </div>
+                </li>
+                <li class="callout-item">
+                  <span class="callout-num">2</span>
+                  <div class="callout-text">
+                    <div class="callout-title">Every row has ✓</div>
+                    <div class="callout-body">Each row shows a green check on the left. If any row were missing one, you still had items to load.</div>
+                  </div>
+                </li>
+                <li class="callout-item">
+                  <span class="callout-num">3</span>
+                  <div class="callout-text">
+                    <div class="callout-title">Tap back</div>
+                    <div class="callout-body">Back arrow returns you to Load Details. From there, open the menu one more time to wrap up — POD photo, End Loading, Loading Complete.</div>
+                  </div>
+                </li></ol>
+      </div>
+    </section>
+
+    <section id="ym-step-14-close-out-capture-the-pod" class="step">
+      <div class="step-header">
+        <div class="eyebrow">STEP  14</div>
+        <h2 class="step-title">Close Out: Capture the POD</h2>
+        <p class="descriptor">Open the menu again. Tap Photo/POD to grab the signed proof of delivery.</p>
+      </div>
+      <figure class="step-image">
+        <img src="slides/ym-15.jpg" alt="Close Out: Capture the POD" loading="lazy">
+      </figure>
+      <div class="step-callouts">
+        <h3 class="callouts-heading">What you'll see on this screen</h3>
+        <ol class="callout-list">
+                <li class="callout-item">
+                  <span class="callout-num">1</span>
+                  <div class="callout-text">
+                    <div class="callout-title">Tap Photo/POD</div>
+                    <div class="callout-body">Opens the same photo screen you saw at Step 12 — but photos taken from here attach to the LOAD as a whole, not a single line item. The next slide walks through capturing the signed proof of delivery.</div>
+                  </div>
+                </li></ol>
+      </div>
+    </section>
+
+    <section id="ym-step-15-document-the-proof-of-delivery-pod" class="step">
+      <div class="step-header">
+        <div class="eyebrow">STEP  15</div>
+        <h2 class="step-title">Document the Proof of Delivery (POD)</h2>
+        <p class="descriptor">Tapping Photo/POD from the menu opens this same screen — but photos here attach to the WHOLE LOAD, not a single line item.</p>
+      </div>
+      <figure class="step-image">
+        <img src="slides/ym-16.jpg" alt="Document the Proof of Delivery (POD)" loading="lazy">
+      </figure>
+      <div class="step-callouts">
+        <h3 class="callouts-heading">What you'll see on this screen</h3>
+        <ol class="callout-list">
+                <li class="callout-item">
+                  <span class="callout-num">1</span>
+                  <div class="callout-text">
+                    <div class="callout-title">Photo Type</div>
+                    <div class="callout-body">Leave it on POD — that&#x27;s the default and the right category for the signed proof of delivery. Switch to Loads if you&#x27;re also documenting the loaded truck.</div>
+                  </div>
+                </li>
+                <li class="callout-item">
+                  <span class="callout-num">2</span>
+                  <div class="callout-text">
+                    <div class="callout-title">Comment</div>
+                    <div class="callout-body">Optional note — e.g., “signed at gate by driver” or “customer rep refused to sign.” Helps the office interpret what they see later.</div>
+                  </div>
+                </li>
+                <li class="callout-item">
+                  <span class="callout-num">3</span>
+                  <div class="callout-text">
+                    <div class="callout-title">Scan Docs</div>
+                    <div class="callout-body">Best for the signed BOL or any printed paperwork the driver hands over. The scanner crops and de-skews each page automatically.</div>
+                  </div>
+                </li>
+                <li class="callout-item">
+                  <span class="callout-num">4</span>
+                  <div class="callout-text">
+                    <div class="callout-title">Take Photos</div>
+                    <div class="callout-body">Best for the signed POD itself (when there&#x27;s no separate paperwork), the loaded truck, or any condition you want recorded. Photos here attach to the load, not a line item.</div>
+                  </div>
+                </li></ol>
+      </div>
+    </section>
+
+    <section id="ym-step-16-scan-the-pod-document" class="step">
+      <div class="step-header">
+        <div class="eyebrow">STEP  16</div>
+        <h2 class="step-title">Scan the POD Document</h2>
+        <p class="descriptor">Frame each page, the camera captures it. Multi-page POD docs supported — when done, tap the blue check to save.</p>
+      </div>
+      <figure class="step-image">
+        <img src="slides/ym-17.jpg" alt="Scan the POD Document" loading="lazy">
+      </figure>
+      <div class="step-callouts">
+        <h3 class="callouts-heading">What you'll see on this screen</h3>
+        <ol class="callout-list">
+                <li class="callout-item">
+                  <span class="callout-num">1</span>
+                  <div class="callout-text">
+                    <div class="callout-title">Close (X)</div>
+                    <div class="callout-body">Cancels the whole scanner session — no pages saved. Tap if you opened it by mistake.</div>
+                  </div>
+                </li>
+                <li class="callout-item">
+                  <span class="callout-num">2</span>
+                  <div class="callout-text">
+                    <div class="callout-title">Blue check — Done</div>
+                    <div class="callout-body">Saves every captured page as one document and returns you to the Photo screen. Tap this once you&#x27;re satisfied with all the pages.</div>
+                  </div>
+                </li>
+                <li class="callout-item">
+                  <span class="callout-num">3</span>
+                  <div class="callout-text">
+                    <div class="callout-title">Shutter — one tap per page</div>
+                    <div class="callout-body">Manual capture. Stay in the scanner, line up the next page, tap again. Each tap adds another page to the same document.</div>
+                  </div>
+                </li>
+                <li class="callout-item">
+                  <span class="callout-num">4</span>
+                  <div class="callout-text">
+                    <div class="callout-title">Auto / Manual</div>
+                    <div class="callout-body">Auto captures the moment the page is framed. Manual waits for you to tap the shutter.</div>
+                  </div>
+                </li>
+                <li class="callout-item">
+                  <span class="callout-num">5</span>
+                  <div class="callout-text">
+                    <div class="callout-title">Page thumbnails</div>
+                    <div class="callout-body">Every page you&#x27;ve captured shows up at the bottom as a small thumbnail — quick visual count of how many you&#x27;ve scanned so far.</div>
+                  </div>
+                </li></ol>
+      </div>
+    </section>
+
+    <section id="ym-step-17-review-captured-pages" class="step">
+      <div class="step-header">
+        <div class="eyebrow">STEP  17</div>
+        <h2 class="step-title">Review Captured Pages</h2>
+        <p class="descriptor">Quick check before saving — adjust corners, rotate, delete a bad page, or retake the whole scan.</p>
+      </div>
+      <figure class="step-image">
+        <img src="slides/ym-18.jpg" alt="Review Captured Pages" loading="lazy">
+      </figure>
+      <div class="step-callouts">
+        <h3 class="callouts-heading">What you'll see on this screen</h3>
+        <ol class="callout-list">
+                <li class="callout-item">
+                  <span class="callout-num">1</span>
+                  <div class="callout-text">
+                    <div class="callout-title">Back</div>
+                    <div class="callout-body">When you&#x27;re satisfied, tap back to save the scanned pages to the load record and return to the Document screen.</div>
+                  </div>
+                </li>
+                <li class="callout-item">
+                  <span class="callout-num">2</span>
+                  <div class="callout-text">
+                    <div class="callout-title">Page indicator (e.g., “1 of 2”)</div>
+                    <div class="callout-body">Shows which page you&#x27;re reviewing out of the total captured. Swipe left/right to flip through each page.</div>
+                  </div>
+                </li>
+                <li class="callout-item">
+                  <span class="callout-num">3</span>
+                  <div class="callout-text">
+                    <div class="callout-title">Retake — drops every page</div>
+                    <div class="callout-body">Throws away ALL pages from this scanning session and reopens the camera. Use only if the whole batch is unusable.</div>
+                  </div>
+                </li>
+                <li class="callout-item">
+                  <span class="callout-num">4</span>
+                  <div class="callout-text">
+                    <div class="callout-title">Adjust · Filters · Rotate</div>
+                    <div class="callout-body">Per-page tools. Adjust pulls the corner handles to fix a misaligned crop. Filters toggles color / grayscale / B&amp;W. Rotate spins the page in 90° steps.</div>
+                  </div>
+                </li>
+                <li class="callout-item">
+                  <span class="callout-num">5</span>
+                  <div class="callout-text">
+                    <div class="callout-title">Delete — drops only this page</div>
+                    <div class="callout-body">Removes just the page you&#x27;re viewing. The rest of the scan stays. Handy if one page is blurry but the others are fine.</div>
+                  </div>
+                </li></ol>
+      </div>
+    </section>
+
+    <section id="ym-step-18-everything-attached-to-the-load" class="step">
+      <div class="step-header">
+        <div class="eyebrow">STEP  18</div>
+        <h2 class="step-title">Everything Attached to the Load</h2>
+        <p class="descriptor">After scanning and snapping all your photos, the Photo screen lists every document and image attached to this load.</p>
+      </div>
+      <figure class="step-image">
+        <img src="slides/ym-19.jpg" alt="Everything Attached to the Load" loading="lazy">
+      </figure>
+      <div class="step-callouts">
+        <h3 class="callouts-heading">What you'll see on this screen</h3>
+        <ol class="callout-list">
+                <li class="callout-item">
+                  <span class="callout-num">1</span>
+                  <div class="callout-text">
+                    <div class="callout-title">Photo Type tabs</div>
+                    <div class="callout-body">Filter the cards by category — POD, Other Doc, Damage, Loads, Other Photo. The current tab is Damage in this example. Switching tabs shows just that type&#x27;s items.</div>
+                  </div>
+                </li>
+                <li class="callout-item">
+                  <span class="callout-num">2</span>
+                  <div class="callout-text">
+                    <div class="callout-title">Scan Docs / Take Photos</div>
+                    <div class="callout-body">Add more to the load at any time. Scan Docs for the document scanner, Take Photos for camera shots. Once added, they appear as new cards.</div>
+                  </div>
+                </li>
+                <li class="callout-item">
+                  <span class="callout-num">3</span>
+                  <div class="callout-text">
+                    <div class="callout-title">Damage / Loads photos</div>
+                    <div class="callout-body">Camera shots show as thumbnails. Tap a card to view full-size, edit the comment, or delete.</div>
+                  </div>
+                </li>
+                <li class="callout-item">
+                  <span class="callout-num">4</span>
+                  <div class="callout-text">
+                    <div class="callout-title">PDF scans (POD, Other Doc)</div>
+                    <div class="callout-body">Multi-page scans saved through the document scanner show with a PDF icon. Tap to view all the pages.</div>
+                  </div>
+                </li>
+                <li class="callout-item">
+                  <span class="callout-num">5</span>
+                  <div class="callout-text">
+                    <div class="callout-title">Card metadata</div>
+                    <div class="callout-body">Every card shows the photo type, the system ID, the timestamp, and who captured it. The office can trace any item back to the person and moment.</div>
+                  </div>
+                </li></ol>
+      </div>
+    </section>
+
+    <section id="ym-step-19-close-out-end-loading-loading-complete" class="step">
+      <div class="step-header">
+        <div class="eyebrow">STEP  19</div>
+        <h2 class="step-title">Close Out: End Loading &amp; Loading Complete</h2>
+        <p class="descriptor">Stop your activity clock with End Loading, then finalize the load — and the driver&#x27;s dwell timer — with Loading Complete.</p>
+      </div>
+      <figure class="step-image">
+        <img src="slides/ym-20.jpg" alt="Close Out: End Loading &amp; Loading Complete" loading="lazy">
+      </figure>
+      <div class="step-callouts">
+        <h3 class="callouts-heading">What you'll see on this screen</h3>
+        <ol class="callout-list">
+                <li class="callout-item">
+                  <span class="callout-num">1</span>
+                  <div class="callout-text">
+                    <div class="callout-title">Tap End Loading first</div>
+                    <div class="callout-body">Stops the clock on YOUR time on this load. The operator clock for this load is now closed. Loading is finished from your side; you can step away.</div>
+                  </div>
+                </li>
+                <li class="callout-item">
+                  <span class="callout-num">2</span>
+                  <div class="callout-text">
+                    <div class="callout-title">Then tap Loading Complete</div>
+                    <div class="callout-body">Finalizes the load in the system and stops the driver&#x27;s dwell-on-site timer. The load drops off your active list, Driver Signature becomes available on Load Details, and the office knows the truck can leave the yard.</div>
+                  </div>
+                </li></ol>
+      </div>
+    </section>
+
+    <section id="ym-anytime-helping-on-a-load" class="step">
+      <div class="step-header">
+        <div class="eyebrow">ANYTIME</div>
+        <h2 class="step-title">Helping on a Load</h2>
+        <p class="descriptor">Multiple staff can share a load — and the app tracks everyone&#x27;s time independently.</p>
+      </div>
+      <figure class="step-image">
+        <img src="slides/ym-21.jpg" alt="Helping on a Load" loading="lazy">
+      </figure>
+      <div class="step-callouts">
+        <h3 class="callouts-heading">What you'll see on this screen</h3>
+        <ol class="callout-list">
+                <li class="callout-item">
+                  <span class="callout-num">1</span>
+                  <div class="callout-text">
+                    <div class="callout-title">Anyone can join</div>
+                    <div class="callout-body">Each operator opens the load → Load Details → menu → Start Loading. No coordination needed; multiple staff can be on the same load at once.</div>
+                  </div>
+                </li>
+                <li class="callout-item">
+                  <span class="callout-num">2</span>
+                  <div class="callout-text">
+                    <div class="callout-title">Everyone works in parallel</div>
+                    <div class="callout-body">All clocks run independently. The bars on the left show three operators with overlapping shifts on the same load.</div>
+                  </div>
+                </li>
+                <li class="callout-item">
+                  <span class="callout-num">3</span>
+                  <div class="callout-text">
+                    <div class="callout-title">End Loading clocks you out</div>
+                    <div class="callout-body">Helpers tap End Loading to stop their personal clock. They can leave any time, even after just a few minutes — their hours are still logged.</div>
+                  </div>
+                </li>
+                <li class="callout-item">
+                  <span class="callout-num">4</span>
+                  <div class="callout-text">
+                    <div class="callout-title">Lead closes with Loading Complete</div>
+                    <div class="callout-body">The lead operator stays past End Loading and taps Loading Complete from the action menu. That&#x27;s the only action that finalizes the load in the system.</div>
+                  </div>
+                </li></ol>
+      </div>
+    </section>
+    </article>
+
+    <article class="guide-section" data-guide-content="rcv">
+      
+      <div class="hero">
+        <div class="hero-eyebrow">FORKLIFT OPERATOR’S</div>
+        <h1 class="hero-title">Receiving App User Guide</h1>
+        <p class="hero-subtitle">How to unload a rail car using the Receiving mobile app version 10.1 as of May 15, 2026 — A step-by-step walkthrough ·  SCM</p>
+      </div>
+      
+
+    <section id="rcv-step-1-select-your-terminal" class="step">
+      <div class="step-header">
+        <div class="eyebrow">STEP 1</div>
+        <h2 class="step-title">Select Your Terminal</h2>
+        <p class="descriptor">Tap the row that matches where you&#x27;re working today.</p>
+      </div>
+      <figure class="step-image">
+        <img src="slides/rcv-02.jpg" alt="Select Your Terminal" loading="lazy">
+      </figure>
+      <div class="step-callouts">
+        <h3 class="callouts-heading">What you'll see on this screen</h3>
+        <ol class="callout-list">
+                <li class="callout-item">
+                  <span class="callout-num">1</span>
+                  <div class="callout-text">
+                    <div class="callout-title">Your login</div>
+                    <div class="callout-body">Your name and email show at the top so you know you&#x27;re signed in to the right account.</div>
+                  </div>
+                </li>
+                <li class="callout-item">
+                  <span class="callout-num">2</span>
+                  <div class="callout-text">
+                    <div class="callout-title">Screen title: Terminals</div>
+                    <div class="callout-body">Confirms you&#x27;re on the terminal-picker screen.</div>
+                  </div>
+                </li>
+                <li class="callout-item">
+                  <span class="callout-num">3</span>
+                  <div class="callout-text">
+                    <div class="callout-title">Power button (log out)</div>
+                    <div class="callout-body">Only tap this at the end of your shift. It signs you out of the app.</div>
+                  </div>
+                </li>
+                <li class="callout-item">
+                  <span class="callout-num">4</span>
+                  <div class="callout-text">
+                    <div class="callout-title">Terminal list</div>
+                    <div class="callout-body">Every location your account has access to. Format is Terminal: City.</div>
+                  </div>
+                </li>
+                <li class="callout-item">
+                  <span class="callout-num">5</span>
+                  <div class="callout-text">
+                    <div class="callout-title">Tap your terminal</div>
+                    <div class="callout-body">Tap the row for where you&#x27;re working today. The app moves to the next screen automatically — no Next or Confirm button.</div>
+                  </div>
+                </li></ol>
+      </div>
+    </section>
+
+    <section id="rcv-step-2-find-your-equipment" class="step">
+      <div class="step-header">
+        <div class="eyebrow">STEP 2</div>
+        <h2 class="step-title">Find Your Equipment</h2>
+        <p class="descriptor">Search for the rail car, container, or truck you&#x27;re about to unload.</p>
+      </div>
+      <figure class="step-image">
+        <img src="slides/rcv-03.jpg" alt="Find Your Equipment" loading="lazy">
+      </figure>
+      <div class="step-callouts">
+        <h3 class="callouts-heading">What you'll see on this screen</h3>
+        <ol class="callout-list">
+                <li class="callout-item">
+                  <span class="callout-num">1</span>
+                  <div class="callout-text">
+                    <div class="callout-title">Back arrow</div>
+                    <div class="callout-body">Returns you to the Terminals screen if you picked the wrong one.</div>
+                  </div>
+                </li>
+                <li class="callout-item">
+                  <span class="callout-num">2</span>
+                  <div class="callout-text">
+                    <div class="callout-title">Screen title: Receivers</div>
+                    <div class="callout-body">Lists every rail car, container, and inbound truck assigned to your terminal.</div>
+                  </div>
+                </li>
+                <li class="callout-item">
+                  <span class="callout-num">3</span>
+                  <div class="callout-text">
+                    <div class="callout-title">Search field</div>
+                    <div class="callout-body">Tap the field and type the rail car number, container ID, or any part of the description.</div>
+                  </div>
+                </li>
+                <li class="callout-item">
+                  <span class="callout-num">4</span>
+                  <div class="callout-text">
+                    <div class="callout-title">Clear button (×)</div>
+                    <div class="callout-body">Tap to wipe the search and start over.</div>
+                  </div>
+                </li>
+                <li class="callout-item">
+                  <span class="callout-num">5</span>
+                  <div class="callout-text">
+                    <div class="callout-title">Terminal heading</div>
+                    <div class="callout-body">Confirms results are filtered to your terminal — here, Napa: Fontana.</div>
+                  </div>
+                </li>
+                <li class="callout-item">
+                  <span class="callout-num">6</span>
+                  <div class="callout-text">
+                    <div class="callout-title">Match — tap to open</div>
+                    <div class="callout-body">The row shows carrier, equipment #, beams/qty, invoice, PO, D.Lock, and BOL#. The grey &quot;3&quot; badge shows the item count. Tap the row to open it.</div>
+                  </div>
+                </li></ol>
+      </div>
+    </section>
+
+    <section id="rcv-step-3-select-task" class="step">
+      <div class="step-header">
+        <div class="eyebrow">STEP 3</div>
+        <h2 class="step-title">Select Task</h2>
+        <p class="descriptor">Pick the role you&#x27;re doing, then tap START TASK.</p>
+      </div>
+      <figure class="step-image">
+        <img src="slides/rcv-04.jpg" alt="Select Task" loading="lazy">
+      </figure>
+      <div class="step-callouts">
+        <h3 class="callouts-heading">What you'll see on this screen</h3>
+        <ol class="callout-list">
+                <li class="callout-item">
+                  <span class="callout-num">1</span>
+                  <div class="callout-text">
+                    <div class="callout-title">Back arrow</div>
+                    <div class="callout-body">Returns you to the Receivers list if you opened the wrong record.</div>
+                  </div>
+                </li>
+                <li class="callout-item">
+                  <span class="callout-num">2</span>
+                  <div class="callout-text">
+                    <div class="callout-title">Screen title: Select Task</div>
+                    <div class="callout-body">Confirms you&#x27;ve opened a receiver and now need to choose your role.</div>
+                  </div>
+                </li>
+                <li class="callout-item">
+                  <span class="callout-num">3</span>
+                  <div class="callout-text">
+                    <div class="callout-title">Pick your task</div>
+                    <div class="callout-body">Multiple operators can run different tasks on the same equipment at the same time. Tap the role you&#x27;re doing:
+Identify Product  — verify what&#x27;s being received.
+Store Product  — put product away in its location.
+Unload  — physically unload the rail car, container, or truck.</div>
+                  </div>
+                </li>
+                <li class="callout-item">
+                  <span class="callout-num">4</span>
+                  <div class="callout-text">
+                    <div class="callout-title">Tap START TASK (top right)</div>
+                    <div class="callout-body">Locks in your selection and starts the clock on the task. The same button becomes END TASK when you&#x27;re done.</div>
+                  </div>
+                </li></ol>
+      </div>
+    </section>
+
+    <section id="rcv-reference-working-as-a-team" class="step">
+      <div class="step-header">
+        <div class="eyebrow">REFERENCE</div>
+        <h2 class="step-title">Working as a Team</h2>
+        <p class="descriptor">Multiple operators can share an unload — and the app tracks everyone&#x27;s time.</p>
+      </div>
+      <figure class="step-image">
+        <img src="slides/rcv-05.jpg" alt="Working as a Team" loading="lazy">
+      </figure>
+      <div class="step-callouts">
+        <h3 class="callouts-heading">What you'll see on this screen</h3>
+        <ol class="callout-list">
+                <li class="callout-item">
+                  <span class="callout-num">1</span>
+                  <div class="callout-text">
+                    <div class="callout-title">Anyone can join — Steps 1, 2, 3</div>
+                    <div class="callout-body">Each operator picks the same terminal, opens the same equipment, chooses a task (Identify Product, Store Product, or Unload), and taps Start Task. No coordination needed.</div>
+                  </div>
+                </li>
+                <li class="callout-item">
+                  <span class="callout-num">2</span>
+                  <div class="callout-text">
+                    <div class="callout-title">Everyone works in parallel</div>
+                    <div class="callout-body">Multiple operators can be on the same equipment at the same time. They can take the same role or split up — whatever the job needs.</div>
+                  </div>
+                </li>
+                <li class="callout-item">
+                  <span class="callout-num">3</span>
+                  <div class="callout-text">
+                    <div class="callout-title">When you&#x27;re done helping — END TASK</div>
+                    <div class="callout-body">Support operators tap END TASK to stop their personal clock. They can leave any time, even after just a few minutes. Their hours are logged.</div>
+                  </div>
+                </li>
+                <li class="callout-item">
+                  <span class="callout-num">4</span>
+                  <div class="callout-text">
+                    <div class="callout-title">One person closes the receiver</div>
+                    <div class="callout-body">The lead operator stays past END TASK to review Located items and tap Accept Receiver. That&#x27;s the only step that finalizes the receiver in the system.</div>
+                  </div>
+                </li></ol>
+      </div>
+    </section>
+
+    <section id="rcv-step-4-review-the-item-list" class="step">
+      <div class="step-header">
+        <div class="eyebrow">STEP 4</div>
+        <h2 class="step-title">Review the Item List</h2>
+        <p class="descriptor">Every item on the pre-receiver is shown — locate each one as you unload.</p>
+      </div>
+      <figure class="step-image">
+        <img src="slides/rcv-06.jpg" alt="Review the Item List" loading="lazy">
+      </figure>
+      <div class="step-callouts">
+        <h3 class="callouts-heading">What you'll see on this screen</h3>
+        <ol class="callout-list">
+                <li class="callout-item">
+                  <span class="callout-num">1</span>
+                  <div class="callout-text">
+                    <div class="callout-title">END TASK (red, top left)</div>
+                    <div class="callout-body">Tap when you&#x27;ve finished your role on this equipment. Don&#x27;t tap until you&#x27;re done.</div>
+                  </div>
+                </li>
+                <li class="callout-item">
+                  <span class="callout-num">2</span>
+                  <div class="callout-text">
+                    <div class="callout-title">Camera &amp; File counter</div>
+                    <div class="callout-body">Tap the camera to take a photo (damage, seals, the load). The (File: 0) counter shows how many photos you&#x27;ve attached.</div>
+                  </div>
+                </li>
+                <li class="callout-item">
+                  <span class="callout-num">3</span>
+                  <div class="callout-text">
+                    <div class="callout-title">Extras</div>
+                    <div class="callout-body">Add an item that isn&#x27;t on the pre-receiver (something showed up that wasn&#x27;t expected).</div>
+                  </div>
+                </li>
+                <li class="callout-item">
+                  <span class="callout-num">4</span>
+                  <div class="callout-text">
+                    <div class="callout-title">Locate &amp; Mark Missing</div>
+                    <div class="callout-body">Locate marks an item as found and put away. Mark Missing flags one that&#x27;s not on the equipment. Both are walked through on the next slides.</div>
+                  </div>
+                </li>
+                <li class="callout-item">
+                  <span class="callout-num">5</span>
+                  <div class="callout-text">
+                    <div class="callout-title">Progress dashboard</div>
+                    <div class="callout-body">Shows your terminal, the equipment, the task, and a live count: Total / Yet to locate / Located / Missing.</div>
+                  </div>
+                </li>
+                <li class="callout-item">
+                  <span class="callout-num">6</span>
+                  <div class="callout-text">
+                    <div class="callout-title">Item rows</div>
+                    <div class="callout-body">Each row is an expected item — number, pieces, linear feet, weight, PO. Use Edit Weight to update weight, or the (i) icon for more detail.</div>
+                  </div>
+                </li></ol>
+      </div>
+    </section>
+
+    <section id="rcv-step-5-locate-unloaded-items" class="step">
+      <div class="step-header">
+        <div class="eyebrow">STEP 5</div>
+        <h2 class="step-title">Locate Unloaded Items</h2>
+        <p class="descriptor">Tap the items you&#x27;ve just unloaded, then tap Locate.</p>
+      </div>
+      <figure class="step-image">
+        <img src="slides/rcv-07.jpg" alt="Locate Unloaded Items" loading="lazy">
+      </figure>
+      <div class="step-callouts">
+        <h3 class="callouts-heading">What you'll see on this screen</h3>
+        <ol class="callout-list">
+                <li class="callout-item">
+                  <span class="callout-num">1</span>
+                  <div class="callout-text">
+                    <div class="callout-title">Tap each item you&#x27;ve unloaded</div>
+                    <div class="callout-body"></div>
+                  </div>
+                </li>
+                <li class="callout-item">
+                  <span class="callout-num"></span>
+                  <div class="callout-text">
+                    <div class="callout-title">The row turns green to show it&#x27;s selected. The counter at the right updates — here, 2 of 3 rows are selected.</div>
+                    <div class="callout-body"></div>
+                  </div>
+                </li>
+                <li class="callout-item">
+                  <span class="callout-num">2</span>
+                  <div class="callout-text">
+                    <div class="callout-title">Tap Locate</div>
+                    <div class="callout-body"></div>
+                  </div>
+                </li>
+                <li class="callout-item">
+                  <span class="callout-num"></span>
+                  <div class="callout-text">
+                    <div class="callout-title">Once your items are highlighted, tap the Locate button at the top. The app moves you to the next screen to record where they were put.</div>
+                    <div class="callout-body"></div>
+                  </div>
+                </li>
+                <li class="callout-item">
+                  <span class="callout-num"></span>
+                  <div class="callout-text">
+                    <div class="callout-title">Tip: You can select multiple items and Locate them in one go.</div>
+                    <div class="callout-body"></div>
+                  </div>
+                </li></ol>
+      </div>
+    </section>
+
+    <section id="rcv-step-6-select-location" class="step">
+      <div class="step-header">
+        <div class="eyebrow">STEP 6</div>
+        <h2 class="step-title">Select Location</h2>
+        <p class="descriptor">Tell the app where you put the items, then confirm.</p>
+      </div>
+      <figure class="step-image">
+        <img src="slides/rcv-08.jpg" alt="Select Location" loading="lazy">
+      </figure>
+      <div class="step-callouts">
+        <h3 class="callouts-heading">What you'll see on this screen</h3>
+        <ol class="callout-list">
+                <li class="callout-item">
+                  <span class="callout-num">1</span>
+                  <div class="callout-text">
+                    <div class="callout-title">Pick the stock location</div>
+                    <div class="callout-body"></div>
+                  </div>
+                </li>
+                <li class="callout-item">
+                  <span class="callout-num"></span>
+                  <div class="callout-text">
+                    <div class="callout-title">Tap the row for where you put the items. The selected row turns green so you can see your choice — here, G1.</div>
+                    <div class="callout-body"></div>
+                  </div>
+                </li>
+                <li class="callout-item">
+                  <span class="callout-num">2</span>
+                  <div class="callout-text">
+                    <div class="callout-title">Tap Locate Items</div>
+                    <div class="callout-body"></div>
+                  </div>
+                </li>
+                <li class="callout-item">
+                  <span class="callout-num"></span>
+                  <div class="callout-text">
+                    <div class="callout-title">The green Locate Items button at the bottom confirms your choice. The selected items are now marked as Located at G1 and the app returns to the item list.</div>
+                    <div class="callout-body"></div>
+                  </div>
+                </li>
+                <li class="callout-item">
+                  <span class="callout-num"></span>
+                  <div class="callout-text">
+                    <div class="callout-title">Tip: Use the search field at the top if your list of locations is long.</div>
+                    <div class="callout-body"></div>
+                  </div>
+                </li></ol>
+      </div>
+    </section>
+
+    <section id="rcv-step-7-items-remaining" class="step">
+      <div class="step-header">
+        <div class="eyebrow">STEP 7</div>
+        <h2 class="step-title">Items Remaining</h2>
+        <p class="descriptor">The list now shows only what&#x27;s left — repeat Locate until everything is located.</p>
+      </div>
+      <figure class="step-image">
+        <img src="slides/rcv-09.jpg" alt="Items Remaining" loading="lazy">
+      </figure>
+      <div class="step-callouts">
+        <h3 class="callouts-heading">What you'll see on this screen</h3>
+        <ol class="callout-list">
+                <li class="callout-item">
+                  <span class="callout-num">1</span>
+                  <div class="callout-text">
+                    <div class="callout-title">Counters updated</div>
+                    <div class="callout-body">Located moves up by 2, Yet to locate drops to 1. The dashboard always shows where you are.</div>
+                  </div>
+                </li>
+                <li class="callout-item">
+                  <span class="callout-num">2</span>
+                  <div class="callout-text">
+                    <div class="callout-title">Only what&#x27;s left is shown</div>
+                    <div class="callout-body">Located items disappear from the list. Just the items you haven&#x27;t found yet remain.</div>
+                  </div>
+                </li>
+                <li class="callout-item">
+                  <span class="callout-num"></span>
+                  <div class="callout-text">
+                    <div class="callout-title">Keep going</div>
+                    <div class="callout-body"></div>
+                  </div>
+                </li>
+                <li class="callout-item">
+                  <span class="callout-num"></span>
+                  <div class="callout-text">
+                    <div class="callout-title">Repeat the same two-step cycle for the remaining item(s):
+
+• Tap the row(s) you&#x27;ve just unloaded → tap Locate
+• Pick the stock location → tap Locate Items
+
+When everything is Located (or Missing), tap END TASK to finish.</div>
+                    <div class="callout-body"></div>
+                  </div>
+                </li></ol>
+      </div>
+    </section>
+
+    <section id="rcv-reference-inventory-details" class="step">
+      <div class="step-header">
+        <div class="eyebrow">REFERENCE</div>
+        <h2 class="step-title">Inventory Details</h2>
+        <p class="descriptor">Optional — tap the (i) icon on any item to log condition, weight, photos, and notes.</p>
+      </div>
+      <figure class="step-image">
+        <img src="slides/rcv-10.jpg" alt="Inventory Details" loading="lazy">
+      </figure>
+      <div class="step-callouts">
+        <h3 class="callouts-heading">What you'll see on this screen</h3>
+        <ol class="callout-list">
+                <li class="callout-item">
+                  <span class="callout-num"></span>
+                  <div class="callout-text">
+                    <div class="callout-title">How to open: Tap the (i) icon on any item row. Use this screen anytime to log condition, take photos, edit weight, or add comments.</div>
+                    <div class="callout-body"></div>
+                  </div>
+                </li>
+                <li class="callout-item">
+                  <span class="callout-num"></span>
+                  <div class="callout-text">
+                    <div class="callout-title">What you can do here</div>
+                    <div class="callout-body"></div>
+                  </div>
+                </li>
+                <li class="callout-item">
+                  <span class="callout-num">1</span>
+                  <div class="callout-text">
+                    <div class="callout-title">Mark Condition</div>
+                    <div class="callout-body">Tap Good, Damaged, or Missing. Use Damaged when product arrives with visible damage so it&#x27;s flagged in records.</div>
+                  </div>
+                </li>
+                <li class="callout-item">
+                  <span class="callout-num">2</span>
+                  <div class="callout-text">
+                    <div class="callout-title">Edit Weight &amp; take photos</div>
+                    <div class="callout-body">Edit Weight opens a keypad to enter the actual weight. The camera lets you attach photos of damage, seals, labels, or anything worth recording.</div>
+                  </div>
+                </li>
+                <li class="callout-item">
+                  <span class="callout-num">3</span>
+                  <div class="callout-text">
+                    <div class="callout-title">Inventory fields</div>
+                    <div class="callout-body">Read-only details about the item — PO, size, length, pieces, linear feet, location, and image count. Green values are what&#x27;s currently on file.</div>
+                  </div>
+                </li>
+                <li class="callout-item">
+                  <span class="callout-num">4</span>
+                  <div class="callout-text">
+                    <div class="callout-title">Add Comment</div>
+                    <div class="callout-body">Leave a note — useful for damage descriptions or anything the next person should see.</div>
+                  </div>
+                </li></ol>
+      </div>
+    </section>
+
+    <section id="rcv-reference-documenting-damaged-items" class="step">
+      <div class="step-header">
+        <div class="eyebrow">REFERENCE</div>
+        <h2 class="step-title">Documenting Damaged Items</h2>
+        <p class="descriptor">Marking an item Damaged prompts you to attach a photo.</p>
+      </div>
+      <figure class="step-image">
+        <img src="slides/rcv-11.jpg" alt="Documenting Damaged Items" loading="lazy">
+      </figure>
+      <div class="step-callouts">
+        <h3 class="callouts-heading">What you'll see on this screen</h3>
+        <ol class="callout-list">
+                <li class="callout-item">
+                  <span class="callout-num"></span>
+                  <div class="callout-text">
+                    <div class="callout-title">83%</div>
+                    <div class="callout-body"></div>
+                  </div>
+                </li>
+                <li class="callout-item">
+                  <span class="callout-num">1</span>
+                  <div class="callout-text">
+                    <div class="callout-title">Extra</div>
+                    <div class="callout-body">Damage Product Packing Tap Damaged On Inventory Details, tap the Damaged option in the Condition selector.</div>
+                  </div>
+                </li>
+                <li class="callout-item">
+                  <span class="callout-num">2</span>
+                  <div class="callout-text">
+                    <div class="callout-title">Save</div>
+                    <div class="callout-body">Tap YES on the prompt The app suggests attaching a photo. Tap YES to open the photo tool.</div>
+                  </div>
+                </li>
+                <li class="callout-item">
+                  <span class="callout-num">3</span>
+                  <div class="callout-text">
+                    <div class="callout-title">Take a Photo &amp; describe</div>
+                    <div class="callout-body">Photo Type is preset to Damage. Add a Comment, then tap Take a Photo.</div>
+                  </div>
+                </li>
+                <li class="callout-item">
+                  <span class="callout-num">4</span>
+                  <div class="callout-text">
+                    <div class="callout-title">Tap Save</div>
+                    <div class="callout-body">Saves the photo and comment to this item&#x27;s record.</div>
+                  </div>
+                </li></ol>
+      </div>
+    </section>
+
+    <section id="rcv-reference-updating-item-weight" class="step">
+      <div class="step-header">
+        <div class="eyebrow">REFERENCE</div>
+        <h2 class="step-title">Updating Item Weight</h2>
+        <p class="descriptor">Use when a product arrives at a different weight than the pre-receiver shows.</p>
+      </div>
+      <figure class="step-image">
+        <img src="slides/rcv-12.jpg" alt="Updating Item Weight" loading="lazy">
+      </figure>
+      <div class="step-callouts">
+        <h3 class="callouts-heading">What you'll see on this screen</h3>
+        <ol class="callout-list">
+                <li class="callout-item">
+                  <span class="callout-num">1</span>
+                  <div class="callout-text">
+                    <div class="callout-title">Tap Edit Weight</div>
+                    <div class="callout-body">Open the item&#x27;s record, then tap Edit Weight in the top right. You can also reach it from the Edit Weight button on each row of the item list.</div>
+                  </div>
+                </li>
+                <li class="callout-item">
+                  <span class="callout-num">2</span>
+                  <div class="callout-text">
+                    <div class="callout-title">Enter the actual weight</div>
+                    <div class="callout-body">Type the real weight from the scale into the field. The keypad pops up automatically.</div>
+                  </div>
+                </li>
+                <li class="callout-item">
+                  <span class="callout-num">3</span>
+                  <div class="callout-text">
+                    <div class="callout-title">Tap Save</div>
+                    <div class="callout-body">Updates the weight on this item. Tap Cancel to leave the weight unchanged.</div>
+                  </div>
+                </li>
+                <li class="callout-item">
+                  <span class="callout-num"></span>
+                  <div class="callout-text">
+                    <div class="callout-title">When to use: Any time the actual weight differs from the pre-receiver — usually after weighing the product at the scale.</div>
+                    <div class="callout-body"></div>
+                  </div>
+                </li></ol>
+      </div>
+    </section>
+
+    <section id="rcv-step-8-all-items-processed-receiver-not-yet-done" class="step">
+      <div class="step-header">
+        <div class="eyebrow">STEP 8</div>
+        <h2 class="step-title">All Items Processed — Receiver Not Yet Done</h2>
+        <p class="descriptor">Your task list is empty, but the receiver still needs to be closed out.</p>
+      </div>
+      <figure class="step-image">
+        <img src="slides/rcv-13.jpg" alt="All Items Processed — Receiver Not Yet Done" loading="lazy">
+      </figure>
+      <div class="step-callouts">
+        <h3 class="callouts-heading">What you'll see on this screen</h3>
+        <ol class="callout-list">
+                <li class="callout-item">
+                  <span class="callout-num">1</span>
+                  <div class="callout-text">
+                    <div class="callout-title">Final tally — items processed</div>
+                    <div class="callout-body">Yet to locate is 0, but the receiver itself isn&#x27;t closed yet. Two things still need to happen.</div>
+                  </div>
+                </li>
+                <li class="callout-item">
+                  <span class="callout-num">2</span>
+                  <div class="callout-text">
+                    <div class="callout-title">SUPPORT STAFF</div>
+                    <div class="callout-body">Tap END TASK to stop your clock</div>
+                  </div>
+                </li>
+                <li class="callout-item">
+                  <span class="callout-num"></span>
+                  <div class="callout-text">
+                    <div class="callout-title">If you helped on the unload but aren&#x27;t responsible for closing out the receiver, tap END TASK. It ends your time on this equipment only — the receiver itself stays open.</div>
+                    <div class="callout-body"></div>
+                  </div>
+                </li>
+                <li class="callout-item">
+                  <span class="callout-num">3</span>
+                  <div class="callout-text">
+                    <div class="callout-title">LEAD OPERATOR (closes the receiver)</div>
+                    <div class="callout-body">Review Missing items (not-located icon)</div>
+                  </div>
+                </li>
+                <li class="callout-item">
+                  <span class="callout-num"></span>
+                  <div class="callout-text">
+                    <div class="callout-title">Tap the not-located icon (locator arrow with a slash) to see only items marked Missing. Double-check before continuing.</div>
+                    <div class="callout-body"></div>
+                  </div>
+                </li>
+                <li class="callout-item">
+                  <span class="callout-num">4</span>
+                  <div class="callout-text">
+                    <div class="callout-title">Open Located items (➤) to close out</div>
+                    <div class="callout-body">Tap the paper-plane icon to open the Located list — this is where the lead operator finalizes the receiver.</div>
+                  </div>
+                </li></ol>
+      </div>
+    </section>
+
+    <section id="rcv-step-9-review-missing-items" class="step">
+      <div class="step-header">
+        <div class="eyebrow">STEP 9</div>
+        <h2 class="step-title">Review Missing Items</h2>
+        <p class="descriptor">Recover anything marked Missing by mistake.</p>
+      </div>
+      <figure class="step-image">
+        <img src="slides/rcv-14.jpg" alt="Review Missing Items" loading="lazy">
+      </figure>
+      <div class="step-callouts">
+        <h3 class="callouts-heading">What you'll see on this screen</h3>
+        <ol class="callout-list">
+                <li class="callout-item">
+                  <span class="callout-num">1</span>
+                  <div class="callout-text">
+                    <div class="callout-title">Select any items found after all</div>
+                    <div class="callout-body"></div>
+                  </div>
+                </li>
+                <li class="callout-item">
+                  <span class="callout-num"></span>
+                  <div class="callout-text">
+                    <div class="callout-title">Scan the Missing list. If any of these items were actually on the equipment and were marked Missing by mistake, tap the row — it turns green to confirm.</div>
+                    <div class="callout-body"></div>
+                  </div>
+                </li>
+                <li class="callout-item">
+                  <span class="callout-num">2</span>
+                  <div class="callout-text">
+                    <div class="callout-title">Tap Remove From Missing List</div>
+                    <div class="callout-body"></div>
+                  </div>
+                </li>
+                <li class="callout-item">
+                  <span class="callout-num"></span>
+                  <div class="callout-text">
+                    <div class="callout-title">Returns the selected items to the regular receiver detail list as Yet-to-Locate, so you can locate them properly. Items left here stay marked Missing.</div>
+                    <div class="callout-body"></div>
+                  </div>
+                </li>
+                <li class="callout-item">
+                  <span class="callout-num"></span>
+                  <div class="callout-text">
+                    <div class="callout-title">Tip: Use the (i) icon on a row first to verify item details before recovering it from the Missing list.</div>
+                    <div class="callout-body"></div>
+                  </div>
+                </li></ol>
+      </div>
+    </section>
+
+    <section id="rcv-step-10-close-the-receiver" class="step">
+      <div class="step-header">
+        <div class="eyebrow">STEP 10</div>
+        <h2 class="step-title">Close the Receiver</h2>
+        <p class="descriptor">Review every located item and its stock location, then accept.</p>
+      </div>
+      <figure class="step-image">
+        <img src="slides/rcv-15.jpg" alt="Close the Receiver" loading="lazy">
+      </figure>
+      <div class="step-callouts">
+        <h3 class="callouts-heading">What you'll see on this screen</h3>
+        <ol class="callout-list">
+                <li class="callout-item">
+                  <span class="callout-num">1</span>
+                  <div class="callout-text">
+                    <div class="callout-title">Review each item&#x27;s location</div>
+                    <div class="callout-body">The last value on each row is the stock location. Make sure each item is where it should be — here, two items at G1 and one at G2.</div>
+                  </div>
+                </li>
+                <li class="callout-item">
+                  <span class="callout-num">2</span>
+                  <div class="callout-text">
+                    <div class="callout-title">Drill in if you need to (i)</div>
+                    <div class="callout-body">Tap the info icon on any row to confirm details, photos, weight, or condition before accepting.</div>
+                  </div>
+                </li>
+                <li class="callout-item">
+                  <span class="callout-num">3</span>
+                  <div class="callout-text">
+                    <div class="callout-title">Tap Accept Receiver</div>
+                    <div class="callout-body">Starts the close-out. The app will then ask two final questions to finish (see Step 11).</div>
+                  </div>
+                </li>
+                <li class="callout-item">
+                  <span class="callout-num"></span>
+                  <div class="callout-text">
+                    <div class="callout-title">Next: Two final confirmations
+After Accept Receiver, the app asks if items are Ready to Ship and whether the rail car is complete.</div>
+                    <div class="callout-body"></div>
+                  </div>
+                </li>
+                <li class="callout-item">
+                  <span class="callout-num"></span>
+                  <div class="callout-text">
+                    <div class="callout-title">Heads-up: Only the lead operator should tap Accept Receiver. Support staff should have tapped END TASK earlier (Step 8).</div>
+                    <div class="callout-body"></div>
+                  </div>
+                </li></ol>
+      </div>
+    </section>
+
+    <section id="rcv-step-11-two-final-confirmations" class="step">
+      <div class="step-header">
+        <div class="eyebrow">STEP 11</div>
+        <h2 class="step-title">Two Final Confirmations</h2>
+        <p class="descriptor">Confirm shipping status, then close out the rail car in the system.</p>
+      </div>
+      <figure class="step-image">
+        <img src="slides/rcv-16.jpg" alt="Two Final Confirmations" loading="lazy">
+      </figure>
+      <div class="step-callouts">
+        <h3 class="callouts-heading">What you'll see on this screen</h3>
+        <ol class="callout-list">
+                <li class="callout-item">
+                  <span class="callout-num"></span>
+                  <div class="callout-text">
+                    <div class="callout-title">88%</div>
+                    <div class="callout-body">FIRST DIALOG Accept Receiver</div>
+                  </div>
+                </li>
+                <li class="callout-item">
+                  <span class="callout-num"></span>
+                  <div class="callout-text">
+                    <div class="callout-title">Ready to Ship?</div>
+                    <div class="callout-body">Ready to Ship — product enters inventory immediately and is ready for outbound.
+
+Send to CSR for review — flag this receiver for a customer service rep when something looks off.</div>
+                  </div>
+                </li>
+                <li class="callout-item">
+                  <span class="callout-num"></span>
+                  <div class="callout-text">
+                    <div class="callout-title">SECOND DIALOG</div>
+                    <div class="callout-body">Is Rail car complete?</div>
+                  </div>
+                </li>
+                <li class="callout-item">
+                  <span class="callout-num"></span>
+                  <div class="callout-text">
+                    <div class="callout-title">Rail Car is complete — marks the rail car as unloaded in the rail system. Use when the car is empty and clear.
+
+Rail Car is NOT complete — leaves the car open in the rail system (e.g., it still needs cleaning).</div>
+                    <div class="callout-body"></div>
+                  </div>
+                </li>
+                <li class="callout-item">
+                  <span class="callout-num"></span>
+                  <div class="callout-text">
+                    <div class="callout-title">✓  All done — receiver is complete.</div>
+                    <div class="callout-body"></div>
+                  </div>
+                </li></ol>
+      </div>
+    </section>
+    </article>
+  </main>
+</div>
+
+<script>
+var tabs = document.querySelectorAll('.tab');
+var guides = document.querySelectorAll('.guide-section');
+var navWraps = document.querySelectorAll('[data-guide-nav-wrap]');
+var navs = document.querySelectorAll('[data-guide-nav]');
+function showGuide(id) {
+  tabs.forEach(function (t) { t.classList.toggle('active', t.dataset.guide === id); });
+  guides.forEach(function (g) { g.classList.toggle('active', g.dataset.guideContent === id); });
+  navWraps.forEach(function (w) { w.style.display = (w.dataset.guideNavWrap === id ? '' : 'none'); });
+  navs.forEach(function (n) { n.classList.toggle('visible', n.dataset.guideNav === id); });
+  window.scrollTo({ top: 0, behavior: 'instant' });
+}
+tabs.forEach(function (t) { t.addEventListener('click', function () { showGuide(t.dataset.guide); }); });
+document.querySelectorAll('[data-guide-nav="ym"]').forEach(function (n) { n.classList.add('visible'); });
+
+var menuBtn = document.getElementById('menuBtn');
+var sidebar = document.getElementById('sidebar');
+menuBtn.addEventListener('click', function () { sidebar.classList.toggle('open'); });
+document.querySelectorAll('.sidebar-list a').forEach(function (a) {
+  a.addEventListener('click', function () {
+    if (window.innerWidth <= 760) sidebar.classList.remove('open');
+  });
+});
+
+var search = document.getElementById('searchInput');
+search.addEventListener('input', function (e) {
+  var q = e.target.value.trim().toLowerCase();
+  document.querySelectorAll('.step').forEach(function (step) {
+    if (!q) { step.classList.remove('match-hidden'); return; }
+    var text = step.textContent.toLowerCase();
+    step.classList.toggle('match-hidden', text.indexOf(q) === -1);
+  });
+  document.querySelectorAll('.sidebar-list a').forEach(function (a) {
+    var target = a.getAttribute('href');
+    if (!target || target.charAt(0) !== '#') return;
+    var step = document.getElementById(target.slice(1));
+    a.parentElement.classList.toggle('match-hidden', step ? step.classList.contains('match-hidden') : false);
+  });
+});
+
+if ('IntersectionObserver' in window) {
+  var sections = document.querySelectorAll('.step');
+  var observer = new IntersectionObserver(function (entries) {
+    entries.forEach(function (entry) {
+      if (entry.isIntersecting) {
+        var id = entry.target.id;
+        document.querySelectorAll('.sidebar-list a').forEach(function (a) {
+          a.classList.toggle('active', a.getAttribute('href') === '#' + id);
+        });
+      }
+    });
+  }, { rootMargin: '-100px 0px -60% 0px' });
+  sections.forEach(function (s) { observer.observe(s); });
+}
+</script>
+</body>
+</html>
