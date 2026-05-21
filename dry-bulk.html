@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dry Bulk Rail to Truck — SC-MAN Guide</title>
+<style>
+:root {
+  --navy: #1E3A5F;
+  --navy-deep: #1A2330;
+  --orange: #F39C12;
+  --orange-dk: #C87F0A;
+  --gray-body: #5C6773;
+  --gray-light: #E1E5EA;
+  --gray-bg: #F6F8FB;
+  --white: #FFFFFF;
+  --sidebar-w: 280px;
+  --topbar-h: 56px;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-size: 16px;
+  line-height: 1.55;
+  color: var(--navy-deep);
+  background: var(--gray-bg);
+  -webkit-font-smoothing: antialiased;
+}
+
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: var(--navy);
+  color: var(--white);
+  padding: 0.75rem 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  border-bottom: 3px solid var(--orange);
+  min-height: var(--topbar-h);
+}
+.topbar-title { font-size: 1.05rem; font-weight: 700; white-space: nowrap; }
+.topbar-tabs { display: flex; gap: 0.5rem; margin-left: auto; flex-wrap: wrap; }
+.tab {
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.25);
+  color: var(--white);
+  padding: 0.4rem 0.9rem;
+  border-radius: 999px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  font-family: inherit;
+  text-decoration: none;
+  display: inline-block;
+  transition: background 0.15s;
+}
+.tab:hover { background: rgba(255,255,255,0.1); }
+.tab.active { background: var(--orange); border-color: var(--orange); color: var(--navy-deep); }
+
+.layout { display: flex; width: 100%; }
+
+.sidebar {
+  width: var(--sidebar-w);
+  flex-shrink: 0;
+  padding: 1.5rem 0.75rem 1.5rem 1rem;
+  position: sticky;
+  top: var(--topbar-h);
+  align-self: flex-start;
+  height: calc(100vh - var(--topbar-h));
+  overflow-y: auto;
+  background: var(--gray-bg);
+  border-right: 1px solid var(--gray-light);
+}
+.sidebar-heading {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: var(--navy);
+  text-transform: uppercase;
+  margin: 0 0 0.5rem 0.5rem;
+}
+.sidebar-list { list-style: none; margin: 0; padding: 0; }
+.sidebar-list a {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  padding: 0.5rem 0.7rem;
+  border-radius: 6px;
+  color: var(--navy-deep);
+  text-decoration: none;
+  font-size: 0.9rem;
+  line-height: 1.3;
+  border-left: 3px solid transparent;
+}
+.sidebar-list a:hover { background: rgba(243,156,18,0.08); }
+.sidebar-tag {
+  font-weight: 700;
+  color: var(--orange-dk);
+  font-size: 0.72rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  flex-shrink: 0;
+  min-width: 2.5em;
+}
+.sidebar-title { flex: 1; }
+
+.main {
+  flex: 1;
+  padding: 1.5rem 2.5rem 4rem;
+  min-width: 0;
+  background: var(--white);
+}
+
+.hero {
+  background: var(--navy);
+  color: var(--white);
+  padding: 2.5rem 2rem;
+  border-radius: 12px;
+  margin-bottom: 2rem;
+  border-left: 6px solid var(--orange);
+}
+.hero-eyebrow {
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: var(--orange);
+  text-transform: uppercase;
+  margin-bottom: 0.75rem;
+}
+.hero-title { font-size: 2.25rem; font-weight: 700; margin: 0 0 0.75rem 0; line-height: 1.15; }
+.hero-subtitle { font-size: 1.1rem; color: #CFD8E3; margin: 0; }
+.hero-loom {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-top: 1.25rem;
+  background: rgba(255,255,255,0.12);
+  color: var(--white);
+  padding: 0.5rem 1rem;
+  border-radius: 999px;
+  text-decoration: none;
+  font-size: 0.9rem;
+  font-weight: 600;
+  border: 1px solid rgba(255,255,255,0.25);
+}
+.hero-loom:hover { background: rgba(255,255,255,0.2); }
+
+.requirements {
+  background: #FFF8EC;
+  border: 1px solid #F5D9A1;
+  border-left: 4px solid var(--orange);
+  border-radius: 8px;
+  padding: 1rem 1.25rem;
+  margin: 0 0 2.5rem 0;
+  max-width: 950px;
+}
+.requirements h3 {
+  margin: 0 0 0.5rem 0;
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--orange-dk);
+}
+.requirements ul { margin: 0; padding-left: 1.25rem; }
+.requirements li { margin: 0.25rem 0; }
+
+.step {
+  margin: 2.75rem 0;
+  padding-top: 1.25rem;
+  scroll-margin-top: 80px;
+}
+.step + .step { border-top: 1px solid var(--gray-light); }
+
+.step-header { max-width: 1100px; margin-bottom: 1.5rem; }
+.eyebrow-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  margin-bottom: 0.4rem;
+}
+.eyebrow {
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: var(--orange-dk);
+  text-transform: uppercase;
+}
+.loom-link {
+  font-size: 0.78rem;
+  color: var(--gray-body);
+  text-decoration: none;
+  border: 1px solid var(--gray-light);
+  border-radius: 999px;
+  padding: 0.15rem 0.6rem;
+  font-weight: 500;
+}
+.loom-link:hover { background: var(--gray-fill); color: var(--navy); border-color: var(--orange); }
+.step-title { font-size: 1.7rem; font-weight: 700; margin: 0 0 0.5rem 0; color: var(--navy); }
+.descriptor { font-size: 1.05rem; color: var(--gray-body); margin: 0; font-style: italic; }
+
+.step-body {
+  display: grid;
+  grid-template-columns: minmax(0, 620px) minmax(0, 1fr);
+  gap: 2.5rem;
+  align-items: start;
+}
+
+.screenshot-placeholder {
+  background: repeating-linear-gradient(
+    45deg,
+    #F4F6F9, #F4F6F9 10px,
+    #ECF0F4 10px, #ECF0F4 20px
+  );
+  border: 2px dashed #B8C2CC;
+  border-radius: 10px;
+  padding: 2rem 1.5rem;
+  text-align: center;
+  color: var(--gray-body);
+  min-height: 260px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+}
+.screenshot-placeholder .icon { font-size: 2rem; opacity: 0.6; }
+.screenshot-placeholder .label {
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  color: var(--orange-dk);
+}
+.screenshot-placeholder .desc {
+  font-size: 0.95rem;
+  color: var(--navy-deep);
+  max-width: 400px;
+  line-height: 1.45;
+}
+
+.screenshot {
+  margin: 0;
+}
+.screenshot img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+  border: 1px solid var(--gray-light);
+  background: var(--white);
+}
+.screenshot figcaption {
+  font-size: 0.82rem;
+  color: var(--gray-body);
+  margin-top: 0.5rem;
+  font-style: italic;
+}
+
+.step-text {
+  max-width: 720px;
+}
+.step-text ul {
+  margin: 0;
+  padding-left: 1.2rem;
+}
+.step-text li {
+  margin: 0.4rem 0;
+  color: var(--navy-deep);
+}
+.step-text li ul {
+  margin: 0.3rem 0 0.3rem 0;
+}
+.step-text li ul li {
+  color: var(--gray-body);
+  font-size: 0.93rem;
+}
+.step-text strong { color: var(--navy-deep); }
+.step-text em { color: var(--orange-dk); font-style: normal; font-weight: 600; }
+.step-text code {
+  background: var(--gray-fill, #F4F6F9);
+  padding: 0.1rem 0.35rem;
+  border-radius: 3px;
+  font-size: 0.88rem;
+  color: var(--navy-deep);
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+.step-text .example {
+  background: #F4F8FC;
+  border-left: 3px solid #6B8FB8;
+  padding: 0.6rem 0.85rem;
+  margin: 0.75rem 0;
+  border-radius: 4px;
+  font-size: 0.92rem;
+}
+.step-text .example .label-x {
+  font-weight: 700;
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #5078A0;
+  margin-bottom: 0.25rem;
+  display: block;
+}
+
+.note {
+  background: #FFF8EC;
+  border-left: 4px solid var(--orange);
+  padding: 0.7rem 0.95rem;
+  margin: 1rem 0 0;
+  border-radius: 4px;
+  font-size: 0.92rem;
+}
+.note strong { color: var(--navy); }
+
+@media (max-width: 1200px) {
+  .step-body { grid-template-columns: 1fr; }
+}
+@media (max-width: 900px) {
+  .main { padding: 1rem 1.25rem 3rem; }
+  .step-title { font-size: 1.4rem; }
+  .hero { padding: 1.5rem 1.25rem; }
+  .hero-title { font-size: 1.6rem; }
+}
+@media (max-width: 760px) {
+  .topbar { padding: 0.6rem 0.9rem; gap: 0.6rem; flex-wrap: wrap; }
+  .layout { flex-direction: column; }
+  .sidebar { width: 100%; height: auto; position: static; border-right: none; border-bottom: 1px solid var(--gray-light); }
+}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-title">SC-MAN Guides</div>
+  <div class="topbar-tabs">
+    <a class="tab" href="index.html">Forklift Operator</a>
+    <a class="tab active" href="dry-bulk.html">Dry Bulk</a>
+  </div>
+</header>
+
+<div class="layout">
+  <aside class="sidebar">
+    <div class="sidebar-heading">Dry Bulk Rail to Truck</div>
+    <ol class="sidebar-list">
+      <li><a href="#step-1"><span class="sidebar-tag">1</span><span class="sidebar-title">Create a bulk receiver header</span></a></li>
+      <li><a href="#step-2"><span class="sidebar-tag">2</span><span class="sidebar-title">Use the item catalog</span></a></li>
+      <li><a href="#step-3"><span class="sidebar-tag">3</span><span class="sidebar-title">Add the bulk inventory</span></a></li>
+      <li><a href="#step-4"><span class="sidebar-tag">4</span><span class="sidebar-title">Lock the receiver</span></a></li>
+      <li><a href="#step-5"><span class="sidebar-tag">5</span><span class="sidebar-title">Review inventory balances</span></a></li>
+      <li><a href="#step-6"><span class="sidebar-tag">6</span><span class="sidebar-title">Create an outbound BOL</span></a></li>
+      <li><a href="#step-7"><span class="sidebar-tag">7</span><span class="sidebar-title">Add bulk items to the BOL</span></a></li>
+      <li><a href="#step-8"><span class="sidebar-tag">8</span><span class="sidebar-title">Confirm the inventory drop</span></a></li>
+      <li><a href="#step-9"><span class="sidebar-tag">9</span><span class="sidebar-title">Key rules</span></a></li>
+    </ol>
+  </aside>
+
+  <main class="main">
+
+    <div class="hero">
+      <div class="hero-eyebrow">SC-MAN Office App</div>
+      <h1 class="hero-title">How to Set Up and Use Dry Bulk Inventory</h1>
+      <p class="hero-subtitle">Receiving bulk material from a rail car and shipping it back out on a will-call truck. Walkthrough recorded for Mountain Reload, May 2026.</p>
+      <a class="hero-loom" href="https://loom.com/share/b80cc910558540188c8711b6ee509e50" target="_blank" rel="noopener">▶ Watch the full Loom (≈ 7 min)</a>
+    </div>
+
+    <section class="requirements">
+      <h3>Before you start — three things must be true</h3>
+      <ul>
+        <li>The rail car is <strong>on site</strong> — check Rail → Rail Cars for the "Serving Yard" or "Unloading" count.</li>
+        <li>The receiver type is set to <strong>rail bulk</strong> (not just rail).</li>
+        <li>The bill of lading load type is set to <strong>bulk</strong>.</li>
+      </ul>
+    </section>
+
+    <figure class="screenshot" style="max-width: 900px; margin: 0 0 2.5rem;">
+      <img src="dry-bulk-slides/prereq-rail-cars.jpg" alt="Rail Cars dashboard showing 332 cars Serving Yard and 1 Loading.">
+      <figcaption>Rail → Rail Cars — the dashboard shows how many cars are currently on site. A car must be "Serving Yard" or actively unloading to be selectable on the receiver.</figcaption>
+    </figure>
+
+    <section id="step-1" class="step">
+      <div class="step-header">
+        <div class="eyebrow-row">
+          <span class="eyebrow">Step 1</span>
+          <a class="loom-link" href="https://loom.com/share/b80cc910558540188c8711b6ee509e50?t=20" target="_blank" rel="noopener">▶ 0:20 in Loom</a>
+        </div>
+        <h2 class="step-title">Create a bulk receiver header</h2>
+        <p class="descriptor">Add a new receiver, choose Rail Bulk as the type, pick the on-site car, and save.</p>
+      </div>
+      <div class="step-body">
+        <figure class="screenshot">
+          <img src="dry-bulk-slides/step-1-bulk-receiver-header.jpg" alt="Saved receiver in bulk mode — Dry/Liquid Bulk checked, Rail – Bulk type, Sand profile.">
+          <figcaption>Receiver #925782 after save — note the bulk indicators on the right and bulk column set below.</figcaption>
+        </figure>
+        <div class="step-text">
+          <ul>
+            <li>Start by creating a new receiver for the site you want to use.</li>
+            <li>Choose the correct origin / site (example: <strong>Phoenix / Fisher</strong>).</li>
+            <li>Set the receiver type to <em>Rail Bulk</em> instead of the standard rail receiver type.</li>
+            <li>Select the railcar that is physically <strong>on site and unloading</strong>.</li>
+            <li>Choose the appropriate bulk profile (example: <strong>Sand and Gravel</strong> / BOL profile).</li>
+            <li>Save the receiver header.</li>
+            <li>Once saved, the receiver should display bulk-specific fields such as <strong>description, weight, and volume</strong> instead of standard item fields.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section id="step-2" class="step">
+      <div class="step-header">
+        <div class="eyebrow-row">
+          <span class="eyebrow">Step 2</span>
+          <a class="loom-link" href="https://loom.com/share/b80cc910558540188c8711b6ee509e50?t=98" target="_blank" rel="noopener">▶ 1:38 in Loom</a>
+        </div>
+        <h2 class="step-title">Use the item catalog for bulk receiver details</h2>
+        <p class="descriptor">Bulk receivers source detail rows from the item catalog — manual entry and import should be disabled.</p>
+      </div>
+      <div class="step-body">
+        <figure class="screenshot">
+          <img src="dry-bulk-slides/step-2-item-catalog.jpg" alt="Item Catalog Listing showing the Fisher Sand & Gravel entry — Product: Sand, Extended: Sand type 5, PG2: Sand 5.">
+          <figcaption>Item Catalog with the Fisher / Sand / Sand type 5 / PG1 entry that the bulk receiver pulls from.</figcaption>
+        </figure>
+        <div class="step-text">
+          <ul>
+            <li>For dry bulk, the system should use the <strong>item catalog</strong> rather than standard receiver detail entry.</li>
+            <li>The bulk workflow should rely on a catalog record tied to the receiver / origin.</li>
+            <li>Example catalog setup:
+              <ul>
+                <li>Item name: <code>Sand</code></li>
+                <li>Extended description: <code>Sand Type 5</code></li>
+                <li>Required product group / code: <code>PG1</code></li>
+              </ul>
+            </li>
+            <li>In the bulk process, the system should gray out manual receiver detail entry and import options so users are guided to the catalog.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section id="step-3" class="step">
+      <div class="step-header">
+        <div class="eyebrow-row">
+          <span class="eyebrow">Step 3</span>
+          <a class="loom-link" href="https://loom.com/share/b80cc910558540188c8711b6ee509e50?t=141" target="_blank" rel="noopener">▶ 2:21 in Loom</a>
+        </div>
+        <h2 class="step-title">Add the bulk inventory into the receiver</h2>
+        <p class="descriptor">One record per railcar, in the right unit — weight for dry bulk, volume for liquid.</p>
+      </div>
+      <div class="step-body">
+        <figure class="screenshot">
+          <img src="dry-bulk-slides/step-3-add-inventory.jpg" alt="Receiver detail with Sand type 5 added at 197,000 lb, still unlocked.">
+          <figcaption>Receiver #925782 with the catalog item added at 197,000 lb — Pounds field now populated, receiver still unlocked.</figcaption>
+        </figure>
+        <div class="step-text">
+          <ul>
+            <li>Add the bulk item to the receiver.</li>
+            <li>Enter the quantity using the correct unit for the bulk type:
+              <ul>
+                <li><strong>Weight</strong> for dry bulk</li>
+                <li><strong>Volume</strong> for liquid bulk</li>
+              </ul>
+            </li>
+            <li>Example used: <strong>197,000 pounds</strong> for one railcar.</li>
+            <li>The default assumption is <strong>one record per railcar</strong>.</li>
+            <li>If multiple records are needed, the quantities should be combined and handled through the bulk inventory logic — talk to the office before doing this.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section id="step-4" class="step">
+      <div class="step-header">
+        <div class="eyebrow-row">
+          <span class="eyebrow">Step 4</span>
+          <a class="loom-link" href="https://loom.com/share/b80cc910558540188c8711b6ee509e50?t=180" target="_blank" rel="noopener">▶ 3:00 in Loom</a>
+        </div>
+        <h2 class="step-title">Lock the receiver to finalize on-hand inventory</h2>
+        <p class="descriptor">Locking confirms the material is physically on hand and posts it to inventory.</p>
+      </div>
+      <div class="step-body">
+        <figure class="screenshot">
+          <img src="dry-bulk-slides/step-4-receiver-locked.jpg" alt="Locked receiver — padlock icon next to #925782 is now red/closed.">
+          <figcaption>Receiver #925782 after locking — note the red closed padlock next to the number. The receiver is now read-only and 197,000 lb has posted to inventory.</figcaption>
+        </figure>
+        <div class="step-text">
+          <ul>
+            <li>After the bulk material is received, lock the receiver.</li>
+            <li>Locking confirms the inventory is now <strong>physically on hand</strong>.</li>
+            <li>Once locked, the receiver becomes a finalized inventory record.</li>
+            <li>You can then review the account inventory to confirm the bulk product balance.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section id="step-5" class="step">
+      <div class="step-header">
+        <div class="eyebrow-row">
+          <span class="eyebrow">Step 5</span>
+          <a class="loom-link" href="https://loom.com/share/b80cc910558540188c8711b6ee509e50?t=202" target="_blank" rel="noopener">▶ 3:22 in Loom</a>
+        </div>
+        <h2 class="step-title">Review bulk inventory balances</h2>
+        <p class="descriptor">Open the account inventory and check Book Products to confirm the receiver posted correctly.</p>
+      </div>
+      <div class="step-body">
+        <figure class="screenshot">
+          <img src="dry-bulk-slides/step-5-inventory-initial.jpg" alt="Fisher Sand & Gravel inventory → Bulk Products Inventory showing Sand type 5 at 197,000 lb.">
+          <figcaption>Fisher account → Inventory → Bulk Products Inventory — Sand type 5 sitting at 197,000 lb, ready to ship.</figcaption>
+        </figure>
+        <div class="step-text">
+          <ul>
+            <li>Open the account inventory and view <strong>bulk products</strong>.</li>
+            <li>You should see the received bulk item listed with its current balance.</li>
+            <li>Example shown:
+              <ul>
+                <li>Fisher Sand and Gravel</li>
+                <li>Sand Type 5</li>
+                <li><strong>197,000 lb</strong> balance</li>
+              </ul>
+            </li>
+          </ul>
+          <div class="note"><strong>Heads-up:</strong> bulk transaction history exists, but the transaction screen shown today is the <em>liquid-bulk</em> one. A dedicated dry-bulk transaction screen is on the roadmap.</div>
+        </div>
+      </div>
+    </section>
+
+    <section id="step-6" class="step">
+      <div class="step-header">
+        <div class="eyebrow-row">
+          <span class="eyebrow">Step 6</span>
+          <a class="loom-link" href="https://loom.com/share/b80cc910558540188c8711b6ee509e50?t=251" target="_blank" rel="noopener">▶ 4:11 in Loom</a>
+        </div>
+        <h2 class="step-title">Create an outbound bill of lading for bulk material</h2>
+        <p class="descriptor">Bulk load type tells the system to draw from bulk inventory instead of item inventory.</p>
+      </div>
+      <div class="step-body">
+        <figure class="screenshot">
+          <img src="dry-bulk-slides/step-6-bol-created.jpg" alt="BOL details #1276816 just created with Will-Call Bulk load type.">
+          <figcaption>BOL #1276816 right after creation — Load Type "Will-Call Bulk", empty detail rows ready for items.</figcaption>
+        </figure>
+        <div class="step-text">
+          <ul>
+            <li>To ship bulk material out, create a new bill of lading.</li>
+            <li>Select the correct terminal (example: <strong>Phoenix</strong>).</li>
+            <li>Choose a load type that indicates the shipment is <em>bulk</em>.</li>
+            <li>This load type tells the system to use bulk-specific detail search and entry.</li>
+            <li>Set the inventory source and delivery context as needed (example: <strong>will call / outbound bulk</strong>).</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section id="step-7" class="step">
+      <div class="step-header">
+        <div class="eyebrow-row">
+          <span class="eyebrow">Step 7</span>
+          <a class="loom-link" href="https://loom.com/share/b80cc910558540188c8711b6ee509e50?t=300" target="_blank" rel="noopener">▶ 5:00 in Loom</a>
+        </div>
+        <h2 class="step-title">Add bulk items to the bill of lading</h2>
+        <p class="descriptor">Filter to dry bulk, pick the item, enter the shipped quantity, submit.</p>
+      </div>
+      <div class="step-body">
+        <figure class="screenshot">
+          <img src="dry-bulk-slides/step-7-bol-with-item.jpg" alt="BOL with Sand type 5 added at 45,000 lb, stock location CHTT722239333.">
+          <figcaption>BOL #1276816 with Sand type 5 line added at 45,000 lb — pounds total on the right has updated.</figcaption>
+        </figure>
+        <div class="step-text">
+          <ul>
+            <li>Open the bill of lading and add items.</li>
+            <li>Filter for the correct bulk category:
+              <ul>
+                <li><strong>Dry bulk</strong> for sand / gravel</li>
+                <li><strong>Liquid bulk</strong> if applicable</li>
+              </ul>
+            </li>
+            <li>Optionally filter to <strong>positive balances only</strong>.</li>
+            <li>Select the bulk item from inventory (example: <code>Sand Type 5</code>).</li>
+            <li>Enter the outbound quantity (example: <strong>45,000 pounds</strong>).</li>
+            <li>Submit the line to create the bill of lading detail.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section id="step-8" class="step">
+      <div class="step-header">
+        <div class="eyebrow-row">
+          <span class="eyebrow">Step 8</span>
+          <a class="loom-link" href="https://loom.com/share/b80cc910558540188c8711b6ee509e50?t=348" target="_blank" rel="noopener">▶ 5:48 in Loom</a>
+        </div>
+        <h2 class="step-title">Confirm the inventory balance updates after shipment</h2>
+        <p class="descriptor">Sanity-check the math: the bulk balance should drop by exactly the shipped quantity.</p>
+      </div>
+      <div class="step-body">
+        <figure class="screenshot">
+          <img src="dry-bulk-slides/step-8-inventory-drop.jpg" alt="Fisher Sand & Gravel inventory → Bulk Products Inventory showing Sand type 5 at 152,000 lb.">
+          <figcaption>Fisher account → Inventory → Bulk Products Inventory — Sand type 5 now at 152,000 lb (197,000 received − 45,000 shipped).</figcaption>
+        </figure>
+        <div class="step-text">
+          <ul>
+            <li>Return to the account inventory and check the bulk product balance.</li>
+            <li>The shipped quantity should be deducted from the on-hand amount.</li>
+            <li>Example result:
+              <ul>
+                <li>Starting balance: <strong>197,000 lb</strong></li>
+                <li>Shipped: <strong>45,000 lb</strong></li>
+                <li>Remaining balance: <strong>152,000 lb</strong></li>
+              </ul>
+            </li>
+            <li>This confirms the dry-bulk outbound process is working correctly.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section id="step-9" class="step">
+      <div class="step-header">
+        <div class="eyebrow-row">
+          <span class="eyebrow">Step 9 · Reference</span>
+          <a class="loom-link" href="https://loom.com/share/b80cc910558540188c8711b6ee509e50?t=363" target="_blank" rel="noopener">▶ 6:03 in Loom</a>
+        </div>
+        <h2 class="step-title">Key rules for the dry bulk workflow</h2>
+        <p class="descriptor">If a step doesn't behave as expected, run down this checklist.</p>
+      </div>
+      <div class="step-text" style="max-width:950px">
+        <ul>
+          <li>The railcar must be <strong>on site</strong> before it can be unloaded.</li>
+          <li>The receiver profile must be a <strong>bulk receiver type</strong>.</li>
+          <li>The bill of lading load type must also be a <strong>bulk type</strong>.</li>
+          <li>These settings control which inventory details the system searches and displays.</li>
+          <li>The overall workflow:
+            <ul>
+              <li>Receive bulk material into a railcar</li>
+              <li>Lock the receiver</li>
+              <li>Review bulk inventory</li>
+              <li>Create an outbound bulk bill of lading</li>
+              <li>Verify the inventory balance updates</li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+</body>
+</html>
