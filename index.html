@@ -345,6 +345,8 @@ body {
   <div class="topbar-tabs">
     <button class="tab active" data-guide="ym">Yard Management</button>
     <button class="tab" data-guide="rcv">Receiving</button>
+    <a class="tab" href="dry-bulk.html">Dry Bulk</a>
+    <a class="tab" href="data-sources.html">Bulk Ops App — Lists</a>
   </div>
   <div class="search-wrap">
     <input class="search-input" id="searchInput" placeholder="Search…" type="search" aria-label="Search">
@@ -2310,7 +2312,7 @@ Rail Car is NOT complete — leaves the car open in the rail system (e.g., it st
 </div>
 
 <script>
-var tabs = document.querySelectorAll('.tab');
+var tabs = document.querySelectorAll('.tab[data-guide]');
 var guides = document.querySelectorAll('.guide-section');
 var navWraps = document.querySelectorAll('[data-guide-nav-wrap]');
 var navs = document.querySelectorAll('[data-guide-nav]');

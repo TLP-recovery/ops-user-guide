@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Where the Bulk Ops App Gets Its Lists — SC-MAN Guide</title>
+<style>
+:root {
+  --navy: #1E3A5F;
+  --navy-deep: #1A2330;
+  --orange: #F39C12;
+  --orange-dk: #C87F0A;
+  --gray-body: #5C6773;
+  --gray-light: #E1E5EA;
+  --gray-bg: #F6F8FB;
+  --white: #FFFFFF;
+  --sidebar-w: 280px;
+  --topbar-h: 56px;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-size: 16px;
+  line-height: 1.55;
+  color: var(--navy-deep);
+  background: var(--gray-bg);
+  -webkit-font-smoothing: antialiased;
+}
+
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: var(--navy);
+  color: var(--white);
+  padding: 0.75rem 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  border-bottom: 3px solid var(--orange);
+  min-height: var(--topbar-h);
+}
+.topbar-title { font-size: 1.05rem; font-weight: 700; white-space: nowrap; }
+.topbar-tabs { display: flex; gap: 0.5rem; margin-left: auto; flex-wrap: wrap; }
+.tab {
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.25);
+  color: var(--white);
+  padding: 0.4rem 0.9rem;
+  border-radius: 999px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  font-family: inherit;
+  text-decoration: none;
+  display: inline-block;
+  transition: background 0.15s;
+}
+.tab:hover { background: rgba(255,255,255,0.1); }
+.tab.active { background: var(--orange); border-color: var(--orange); color: var(--navy-deep); }
+
+.layout { display: flex; width: 100%; }
+
+.sidebar {
+  width: var(--sidebar-w);
+  flex-shrink: 0;
+  padding: 1.5rem 0.75rem 1.5rem 1rem;
+  position: sticky;
+  top: var(--topbar-h);
+  align-self: flex-start;
+  height: calc(100vh - var(--topbar-h));
+  overflow-y: auto;
+  background: var(--gray-bg);
+  border-right: 1px solid var(--gray-light);
+}
+.sidebar-heading {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: var(--navy);
+  text-transform: uppercase;
+  margin: 0 0 0.5rem 0.5rem;
+}
+.sidebar-list { list-style: none; margin: 0; padding: 0; }
+.sidebar-list a {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  padding: 0.5rem 0.7rem;
+  border-radius: 6px;
+  color: var(--navy-deep);
+  text-decoration: none;
+  font-size: 0.9rem;
+  line-height: 1.3;
+  border-left: 3px solid transparent;
+}
+.sidebar-list a:hover { background: rgba(243,156,18,0.08); }
+.sidebar-tag {
+  font-weight: 700;
+  color: var(--orange-dk);
+  font-size: 0.72rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  flex-shrink: 0;
+  min-width: 2.5em;
+}
+.sidebar-title { flex: 1; }
+
+.main {
+  flex: 1;
+  padding: 1.5rem 2.5rem 4rem;
+  min-width: 0;
+  background: var(--white);
+}
+
+.hero {
+  background: var(--navy);
+  color: var(--white);
+  padding: 2.5rem 2rem;
+  border-radius: 12px;
+  margin-bottom: 2rem;
+  border-left: 6px solid var(--orange);
+}
+.hero-eyebrow {
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: var(--orange);
+  text-transform: uppercase;
+  margin-bottom: 0.75rem;
+}
+.hero-title { font-size: 2.25rem; font-weight: 700; margin: 0 0 0.75rem 0; line-height: 1.15; }
+.hero-subtitle { font-size: 1.1rem; color: #CFD8E3; margin: 0; }
+.hero-loom {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-top: 1.25rem;
+  background: rgba(255,255,255,0.12);
+  color: var(--white);
+  padding: 0.5rem 1rem;
+  border-radius: 999px;
+  text-decoration: none;
+  font-size: 0.9rem;
+  font-weight: 600;
+  border: 1px solid rgba(255,255,255,0.25);
+}
+.hero-loom:hover { background: rgba(255,255,255,0.2); }
+
+.requirements {
+  background: #FFF8EC;
+  border: 1px solid #F5D9A1;
+  border-left: 4px solid var(--orange);
+  border-radius: 8px;
+  padding: 1rem 1.25rem;
+  margin: 0 0 2.5rem 0;
+  max-width: 950px;
+}
+.requirements h3 {
+  margin: 0 0 0.5rem 0;
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--orange-dk);
+}
+.requirements ul { margin: 0; padding-left: 1.25rem; }
+.requirements li { margin: 0.25rem 0; }
+
+.step {
+  margin: 2.75rem 0;
+  padding-top: 1.25rem;
+  scroll-margin-top: 80px;
+}
+.step + .step { border-top: 1px solid var(--gray-light); }
+
+.step-header { max-width: 1100px; margin-bottom: 1.5rem; }
+.eyebrow-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  margin-bottom: 0.4rem;
+}
+.eyebrow {
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: var(--orange-dk);
+  text-transform: uppercase;
+}
+.loom-link {
+  font-size: 0.78rem;
+  color: var(--gray-body);
+  text-decoration: none;
+  border: 1px solid var(--gray-light);
+  border-radius: 999px;
+  padding: 0.15rem 0.6rem;
+  font-weight: 500;
+}
+.loom-link:hover { background: var(--gray-fill); color: var(--navy); border-color: var(--orange); }
+.step-title { font-size: 1.7rem; font-weight: 700; margin: 0 0 0.5rem 0; color: var(--navy); }
+.descriptor { font-size: 1.05rem; color: var(--gray-body); margin: 0; font-style: italic; }
+
+.step-body {
+  display: grid;
+  grid-template-columns: minmax(0, 620px) minmax(0, 1fr);
+  gap: 2.5rem;
+  align-items: start;
+}
+
+.screenshot-placeholder {
+  background: repeating-linear-gradient(
+    45deg,
+    #F4F6F9, #F4F6F9 10px,
+    #ECF0F4 10px, #ECF0F4 20px
+  );
+  border: 2px dashed #B8C2CC;
+  border-radius: 10px;
+  padding: 2rem 1.5rem;
+  text-align: center;
+  color: var(--gray-body);
+  min-height: 260px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+}
+.screenshot-placeholder .icon { font-size: 2rem; opacity: 0.6; }
+.screenshot-placeholder .label {
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  color: var(--orange-dk);
+}
+.screenshot-placeholder .desc {
+  font-size: 0.95rem;
+  color: var(--navy-deep);
+  max-width: 400px;
+  line-height: 1.45;
+}
+
+.screenshot {
+  margin: 0;
+}
+.screenshot img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+  border: 1px solid var(--gray-light);
+  background: var(--white);
+}
+.screenshot figcaption {
+  font-size: 0.82rem;
+  color: var(--gray-body);
+  margin-top: 0.5rem;
+  font-style: italic;
+}
+
+.step-text {
+  max-width: 720px;
+}
+.step-text ul {
+  margin: 0;
+  padding-left: 1.2rem;
+}
+.step-text li {
+  margin: 0.4rem 0;
+  color: var(--navy-deep);
+}
+.step-text li ul {
+  margin: 0.3rem 0 0.3rem 0;
+}
+.step-text li ul li {
+  color: var(--gray-body);
+  font-size: 0.93rem;
+}
+.step-text strong { color: var(--navy-deep); }
+.step-text em { color: var(--orange-dk); font-style: normal; font-weight: 600; }
+.step-text code {
+  background: var(--gray-fill, #F4F6F9);
+  padding: 0.1rem 0.35rem;
+  border-radius: 3px;
+  font-size: 0.88rem;
+  color: var(--navy-deep);
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+.step-text .example {
+  background: #F4F8FC;
+  border-left: 3px solid #6B8FB8;
+  padding: 0.6rem 0.85rem;
+  margin: 0.75rem 0;
+  border-radius: 4px;
+  font-size: 0.92rem;
+}
+.step-text .example .label-x {
+  font-weight: 700;
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #5078A0;
+  margin-bottom: 0.25rem;
+  display: block;
+}
+
+.note {
+  background: #FFF8EC;
+  border-left: 4px solid var(--orange);
+  padding: 0.7rem 0.95rem;
+  margin: 1rem 0 0;
+  border-radius: 4px;
+  font-size: 0.92rem;
+}
+.note strong { color: var(--navy); }
+
+@media (max-width: 1200px) {
+  .step-body { grid-template-columns: 1fr; }
+}
+@media (max-width: 900px) {
+  .main { padding: 1rem 1.25rem 3rem; }
+  .step-title { font-size: 1.4rem; }
+  .hero { padding: 1.5rem 1.25rem; }
+  .hero-title { font-size: 1.6rem; }
+}
+@media (max-width: 760px) {
+  .topbar { padding: 0.6rem 0.9rem; gap: 0.6rem; flex-wrap: wrap; }
+  .layout { flex-direction: column; }
+  .sidebar { width: 100%; height: auto; position: static; border-right: none; border-bottom: 1px solid var(--gray-light); }
+}
+</style>
+
+<style>
+.ask {
+  margin-top: 1.1rem;
+  padding: 0.9rem 1.1rem;
+  background: var(--gray-bg);
+  border-left: 4px solid var(--orange);
+  border-radius: 0 6px 6px 0;
+  font-style: italic;
+  color: var(--navy-deep);
+}
+.ask strong { font-style: normal; }
+.cs-table { width: 100%; border-collapse: collapse; margin-top: 0.5rem; font-size: 0.95rem; }
+.cs-table th, .cs-table td {
+  text-align: left; padding: 0.7rem 0.85rem; border-bottom: 1px solid var(--gray-light);
+  vertical-align: top;
+}
+.cs-table th { background: var(--navy); color: var(--white); font-weight: 700; }
+.cs-table tr:nth-child(even) td { background: var(--gray-bg); }
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-title">SC-MAN Guides</div>
+  <div class="topbar-tabs">
+    <a class="tab" href="index.html">Forklift Operator</a>
+    <a class="tab" href="dry-bulk.html">Dry Bulk</a>
+    <a class="tab active" href="data-sources.html">Bulk Ops App — Lists</a>
+  </div>
+</header>
+
+<div class="layout">
+  <aside class="sidebar">
+    <div class="sidebar-heading">Where the lists come from</div>
+    <ol class="sidebar-list">
+      <li><a href="#why"><span class="sidebar-tag">1</span><span class="sidebar-title">Why a list is empty</span></a></li>
+      <li><a href="#client"><span class="sidebar-tag">2</span><span class="sidebar-title">Client</span></a></li>
+      <li><a href="#destination"><span class="sidebar-tag">3</span><span class="sidebar-title">Destination</span></a></li>
+      <li><a href="#product"><span class="sidebar-tag">4</span><span class="sidebar-title">Product Type</span></a></li>
+      <li><a href="#driver"><span class="sidebar-tag">5</span><span class="sidebar-title">Driver</span></a></li>
+      <li><a href="#source"><span class="sidebar-tag">6</span><span class="sidebar-title">Source — cars and tanks</span></a></li>
+      <li><a href="#cs"><span class="sidebar-tag">7</span><span class="sidebar-title">For Customer Service</span></a></li>
+    </ol>
+  </aside>
+
+  <main class="main">
+
+    <div class="hero">
+      <div class="hero-eyebrow">Bulk Ops Tablet</div>
+      <h1 class="hero-title">Where the App Gets Its Lists</h1>
+      <p class="hero-subtitle">You check a truck in, the first thing the app asks for is a Client — and the list is empty. Nothing is broken. Every list in the app is filled in somewhere else, in Transload Pro. This page says where, and exactly what to ask for.</p>
+    </div>
+
+    <section id="why" class="requirements">
+      <h3>Why a list is empty — read this first</h3>
+      <ul>
+        <li>The app <strong>does not let you create clients, destinations or products in the field</strong>. That is on purpose, not a fault.</li>
+        <li>Those things carry the shipping terms and the inventory setup behind a load. If the field could invent them, a load could be built against terms nobody agreed.</li>
+        <li>So an empty list means <strong>the setup has not been done yet</strong>. It takes Customer Service a couple of minutes.</li>
+        <li>Every picker in the app now has a <strong>?</strong> beside its label. Tap it and you get the same answer as this page, plus the sentence to send Customer Service.</li>
+        <li>Once they save it, close and reopen the picker and it will be there.</li>
+      </ul>
+    </section>
+
+    <section id="client" class="step">
+      <div class="step-header">
+        <div class="eyebrow-row"><span class="eyebrow">List 1</span></div>
+        <h2 class="step-title">Client</h2>
+        <p class="descriptor">The first thing the app asks for when you check a driver in.</p>
+      </div>
+      <div class="step-body">
+        <p><strong>What fills it:</strong> a <strong>BOL Header Template</strong> in Transload Pro that is marked <strong>Extended Use</strong>, with its Terminal set to the terminal you are standing at. No template, no client.</p>
+        <p><strong>The trap:</strong> a template that exists but points at a <em>different</em> terminal is completely invisible here. It will look to Customer Service as though the client is set up.</p>
+        <p class="ask"><strong>Ask for:</strong> “Please add an Extended-Use BOL Header Template for <em>[client name]</em> at <em>[terminal]</em> so it appears in the bulk ops tablet.”</p>
+      </div>
+    </section>
+
+    <section id="destination" class="step">
+      <div class="step-header">
+        <div class="eyebrow-row"><span class="eyebrow">List 2</span></div>
+        <h2 class="step-title">Destination</h2>
+        <p class="descriptor">Where the load is going. Asked on the Header step.</p>
+      </div>
+      <div class="step-body">
+        <p><strong>What fills it:</strong> the <strong>same Extended-Use BOL Header Template</strong> as the client. Each template is one client shipping to one destination.</p>
+        <p><strong>The trap — this one catches everybody:</strong> a second destination for the same client needs a <strong>second template</strong>. It is not a field somebody adds to the existing one. Say that plainly when you ask, or you will get told it is already set up.</p>
+        <p class="ask"><strong>Ask for:</strong> “Please add another Extended-Use BOL Header Template for <em>[client]</em> at <em>[terminal]</em> shipping to <em>[destination]</em>.”</p>
+      </div>
+    </section>
+
+    <section id="product" class="step">
+      <div class="step-header">
+        <div class="eyebrow-row"><span class="eyebrow">List 3</span></div>
+        <h2 class="step-title">Product Type</h2>
+        <p class="descriptor">What the truck is here for. Asked at check-in, after the client.</p>
+      </div>
+      <div class="step-body">
+        <p><strong>What fills it:</strong> the client's <strong>Product Profiles</strong> in Transload Pro — but only profiles set up to hold bulk stock. The profile has to be marked as <strong>volume stock</strong> or <strong>weight stock</strong>.</p>
+        <p><strong>The trap:</strong> a profile with neither ticked exists, looks perfectly normal in Transload Pro, and is invisible to this picker.</p>
+        <p><strong>This is not a list of what is on site.</strong> It is what the client is set up to handle, so it works before a single car has arrived. If the product is listed but no cars are, that is normal — cars show up on the Source list at the railcars step.</p>
+        <p class="ask"><strong>Ask for:</strong> “Please add a bulk Product Profile for <em>[client]</em> for <em>[product]</em>, with volume stock or weight stock ticked.”</p>
+      </div>
+    </section>
+
+    <section id="driver" class="step">
+      <div class="step-header">
+        <div class="eyebrow-row"><span class="eyebrow">List 4</span></div>
+        <h2 class="step-title">Driver</h2>
+        <p class="descriptor">Who is driving. Asked at check-in.</p>
+      </div>
+      <div class="step-body">
+        <p><strong>What fills it:</strong> your company's staff records in Transload Pro whose <strong>Employee Type is a Driver type</strong>. Drivers marked on leave, and deleted records, are hidden on purpose.</p>
+        <p><strong>It is your whole company, not just this terminal</strong> — the list can be long. Type part of the name into the search box rather than scrolling.</p>
+        <p>Ask for an email address to go on the record. It is worth having even if it has to be a work address rather than the driver's own.</p>
+        <p class="ask"><strong>Ask for:</strong> “Please add <em>[driver name]</em> to the driver list with an Employee Type of Driver, phone <em>[number]</em> and email <em>[address]</em>.”</p>
+      </div>
+    </section>
+
+    <section id="source" class="step">
+      <div class="step-header">
+        <div class="eyebrow-row"><span class="eyebrow">List 5</span></div>
+        <h2 class="step-title">Source — railcars, tanks, bulk storage</h2>
+        <p class="descriptor">What you are drawing from. Asked on the railcars step.</p>
+      </div>
+      <div class="step-body">
+        <p><strong>This one is different from the other four.</strong> It is live inventory, not setup — the cars, tanks and ground storage actually holding product at your terminal right now.</p>
+        <p><strong>A car is missing:</strong> a car appears once its <strong>receiver has been posted</strong> in Transload Pro and it still has volume left. A car sitting on the ground but not received yet will not be here. That is the usual reason.</p>
+        <p>A car that empties and drops off the list is correct behaviour, not a fault.</p>
+        <p class="ask"><strong>Ask for:</strong> “Please check the receiver for car <em>[car number]</em> has been posted at <em>[terminal]</em> — it is not showing as a source in the bulk ops tablet.”</p>
+      </div>
+    </section>
+
+    <section id="cs" class="step">
+      <div class="step-header">
+        <div class="eyebrow-row"><span class="eyebrow">Reference</span></div>
+        <h2 class="step-title">For Customer Service</h2>
+        <p class="descriptor">What to create when the field asks.</p>
+      </div>
+      <div class="step-body">
+        <table class="cs-table">
+          <thead>
+            <tr><th>Field asks for</th><th>Create in Transload Pro</th><th>Must be true</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>A client</td>
+              <td>BOL Header Template</td>
+              <td>Marked <strong>Extended Use</strong>; <strong>Terminal</strong> = the terminal they are at</td>
+            </tr>
+            <tr>
+              <td>Another destination for a client already set up</td>
+              <td>A <strong>second</strong> BOL Header Template</td>
+              <td>Same shipping client, new delivery client. Not an edit to the first one</td>
+            </tr>
+            <tr>
+              <td>A product</td>
+              <td>Product Profile on that client</td>
+              <td><strong>Volume stock</strong> or <strong>weight stock</strong> ticked, or it will not appear</td>
+            </tr>
+            <tr>
+              <td>A driver</td>
+              <td>Staff record</td>
+              <td>Employee Type is a <strong>Driver</strong> type; not on leave; not deleted</td>
+            </tr>
+            <tr>
+              <td>A railcar that is on the ground</td>
+              <td>Post the receiver</td>
+              <td>Car must still have volume remaining to appear as a source</td>
+            </tr>
+          </tbody>
+        </table>
+        <p style="margin-top:1.25rem">The field cannot do any of these, by design. Turning one round quickly is what keeps a truck from sitting on the scale.</p>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+</body>
+</html>
