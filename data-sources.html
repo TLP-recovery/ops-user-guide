@@ -350,6 +350,21 @@ body {
 }
 .cs-table th { background: var(--navy); color: var(--white); font-weight: 700; }
 .cs-table tr:nth-child(even) td { background: var(--gray-bg); }
+
+/* The shared stylesheet lays .step-body out as prose + screenshot column.
+   This guide has no screenshots, so that grid auto-placed the second and
+   later paragraphs into the narrow image column and pushed the ask box to a
+   new row, leaving a tall empty gap. Single column here. */
+.step-body { display: block; max-width: 900px; }
+.step-body > p { margin: 0 0 1rem; }
+.trap {
+  margin: 1.1rem 0;
+  padding: 0.9rem 1.1rem;
+  background: #FFF8EC;
+  border-left: 4px solid var(--orange-dk);
+  border-radius: 0 6px 6px 0;
+  color: var(--navy-deep);
+}
 </style>
 </head>
 <body>
@@ -404,7 +419,7 @@ body {
       </div>
       <div class="step-body">
         <p><strong>What fills it:</strong> a <strong>BOL Header Template</strong> in Transload Pro that is marked <strong>Extended Use</strong>, with its Terminal set to the terminal you are standing at. No template, no client.</p>
-        <p><strong>The trap:</strong> a template that exists but points at a <em>different</em> terminal is completely invisible here. It will look to Customer Service as though the client is set up.</p>
+        <p class="trap"><strong>The trap:</strong> a template that exists but points at a <em>different</em> terminal is completely invisible here. It will look to Customer Service as though the client is set up.</p>
         <p class="ask"><strong>Ask for:</strong> “Please add an Extended-Use BOL Header Template for <em>[client name]</em> at <em>[terminal]</em> so it appears in the bulk ops tablet.”</p>
       </div>
     </section>
@@ -417,7 +432,7 @@ body {
       </div>
       <div class="step-body">
         <p><strong>What fills it:</strong> the <strong>same Extended-Use BOL Header Template</strong> as the client. Each template is one client shipping to one destination.</p>
-        <p><strong>The trap — this one catches everybody:</strong> a second destination for the same client needs a <strong>second template</strong>. It is not a field somebody adds to the existing one. Say that plainly when you ask, or you will get told it is already set up.</p>
+        <p class="trap"><strong>The trap — this one catches everybody:</strong> a second destination for the same client needs a <strong>second template</strong>. It is not a field somebody adds to the existing one. Say that plainly when you ask, or you will get told it is already set up.</p>
         <p class="ask"><strong>Ask for:</strong> “Please add another Extended-Use BOL Header Template for <em>[client]</em> at <em>[terminal]</em> shipping to <em>[destination]</em>.”</p>
       </div>
     </section>
@@ -430,7 +445,7 @@ body {
       </div>
       <div class="step-body">
         <p><strong>What fills it:</strong> the client's <strong>Product Profiles</strong> in Transload Pro — but only profiles set up to hold bulk stock. The profile has to be marked as <strong>volume stock</strong> or <strong>weight stock</strong>.</p>
-        <p><strong>The trap:</strong> a profile with neither ticked exists, looks perfectly normal in Transload Pro, and is invisible to this picker.</p>
+        <p class="trap"><strong>The trap:</strong> a profile with neither ticked exists, looks perfectly normal in Transload Pro, and is invisible to this picker.</p>
         <p><strong>This is not a list of what is on site.</strong> It is what the client is set up to handle, so it works before a single car has arrived. If the product is listed but no cars are, that is normal — cars show up on the Source list at the railcars step.</p>
         <p class="ask"><strong>Ask for:</strong> “Please add a bulk Product Profile for <em>[client]</em> for <em>[product]</em>, with volume stock or weight stock ticked.”</p>
       </div>
